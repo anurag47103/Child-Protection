@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="#2193b0"
         tools:context=".MainActivity">
 
         <TextView
@@ -20,7 +20,9 @@
             android:layout_marginTop="100dp"
             android:text="Welcome\nPlease Select Your Choice"
             android:textAlignment="center"
-            android:textSize="30sp"
+            android:textColor="#000000"
+            android:textSize="50sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,10 +31,12 @@
             android:id="@+id/ChildButton"
             android:layout_width="0dp"
             android:layout_height="100dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="50dp"
+            android:background="#00FFFFFF"
             android:padding="20dp"
             android:text="Child"
-            android:textSize="20sp"
+            android:textColor="#020202"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/guideline" />
@@ -42,10 +46,12 @@
             android:id="@+id/ParentButton"
             android:layout_width="0dp"
             android:layout_height="100dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="50dp"
+            android:background="#00FFFFFF"
             android:padding="20dp"
             android:text="Parent"
-            android:textSize="20sp"
+            android:textColor="#000000"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/guideline"
             app:layout_constraintRight_toRightOf="parent" />

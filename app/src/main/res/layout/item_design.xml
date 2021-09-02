@@ -32,8 +32,9 @@
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/imageview"
             android:padding="25dp"
+            android:paddingStart="10dp"
             android:text="Whats App"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textSize="27sp" />
 
