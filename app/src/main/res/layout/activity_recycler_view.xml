@@ -6,31 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".recyclerView">
 
-    <TextView
-        android:id="@+id/header"
+    <androidx.appcompat.widget.SearchView
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#BAFFB522"
-        android:padding="3dp"
-        android:text="List of apps"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="50sp"
-        android:textStyle="bold"
+        android:layout_height="55dp"
+        android:id="@+id/searchview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:defaultQueryHint="Search For Apps"
+        app:iconifiedByDefault="false"/>
 
-    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="56dp"
         android:background="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
-
+        app:layout_constraintTop_toBottomOf="@id/searchview"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
