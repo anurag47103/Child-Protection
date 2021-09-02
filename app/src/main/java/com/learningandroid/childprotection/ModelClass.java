@@ -1,5 +1,5 @@
 package com.learningandroid.childprotection;
-
+// this class is the structure of the items in our recycler view 
 public class ModelClass {
     private int imageview1;
     private String nameText;

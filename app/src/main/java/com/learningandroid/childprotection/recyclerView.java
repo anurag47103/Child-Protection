@@ -26,7 +26,11 @@ public class recyclerView extends AppCompatActivity {
     }
 
     private void initData() {
+        //todo the backend code to get the realtime data will be written here
         userList = new ArrayList<>();
+
+        // temprory list to check if the app is running
+        //this is the list which is shown in the recycle view
         userList.add(new ModelClass(R.drawable.ap,"Amazon Prime","04:23"));
         userList.add(new ModelClass(R.drawable.fb,"Facebook","05:03"));
         userList.add(new ModelClass(R.drawable.fm,"Messenger","06:20"));

@@ -1,5 +1,5 @@
 package com.learningandroid.childprotection;
-
+// this is the adapter class used in our recycler view
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +41,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return userList.size();
     }
 
+
+    // view holder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageview1 ;
