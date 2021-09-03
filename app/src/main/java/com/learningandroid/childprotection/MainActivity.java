@@ -5,14 +5,12 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
+import com.learningandroid.childprotection.UI.recyclerView;
 import com.learningandroid.childprotection.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn;
     private ActivityMainBinding binding;
 /*
 * This is the home screen here we are having two buttons 1 Child 2 parent
@@ -25,20 +23,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
-        btn = (Button) binding.ParentButton;
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callrecyclerView();
-            }
-        });
+        binding.ParentButton.setOnClickListener(view -> callrecyclerView());
 
     }
 
     // this method is called when the button is pressed
     public void callrecyclerView() {
-        Intent intent = new Intent(this,recyclerView.class);
+        Intent intent = new Intent(this, recyclerView.class);
         startActivity(intent);
     }
 }
