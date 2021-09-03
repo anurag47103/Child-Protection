@@ -1,4 +1,4 @@
-package com.learningandroid.childprotection;
+package com.learningandroid.childprotection.adapter;
 // this is the adapter class used in our recycler view
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.nio.charset.StandardCharsets;
+import com.learningandroid.childprotection.R;
+import com.learningandroid.childprotection.model.ModelClass;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChildProtection">
         <activity
-            android:name=".recyclerView"
+            android:name=".UI.recyclerView"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

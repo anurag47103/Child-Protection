@@ -1,4 +1,4 @@
-package com.learningandroid.childprotection;
+package com.learningandroid.childprotection.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+
+import com.learningandroid.childprotection.R;
+import com.learningandroid.childprotection.adapter.Adapter;
+import com.learningandroid.childprotection.model.ModelClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,7 @@ public class recyclerView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
-        searchView = (SearchView)findViewById(R.id.searchview);
+        searchView = findViewById(R.id.searchview);
         initData();
         initRecyclerView();
 
