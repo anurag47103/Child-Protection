@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#839192"
-    tools:context=".UI.recyclerView">
+    tools:context=".UI.parent_recycler_View_class">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchview"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="#E4FFFFFF"
+        android:background="#B23EA838"
+        android:textAlignment="viewStart"
         app:defaultQueryHint="Search For Apps"
         app:goIcon="@drawable/ic_baseline_search_24"
         app:iconifiedByDefault="false"

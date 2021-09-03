@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
-        <entry key="app/src/main/res/layout/activity_recycler_view.xml" value="0.16847826086956522" />
-        <entry key="app/src/main/res/layout/item_design.xml" value="0.24812932305713925" />
+        <entry key="..\:/Users/abhis/Desktop/Abhi/Prog/ANDROID PROJECTS/Child-Protection/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/abhis/Desktop/Abhi/Prog/ANDROID PROJECTS/Child-Protection/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/abhis/Desktop/Abhi/Prog/ANDROID PROJECTS/Child-Protection/app/src/main/res/layout/activity_recycler_view.xml" value="0.24375" />
+        <entry key="..\:/Users/abhis/Desktop/Abhi/Prog/ANDROID PROJECTS/Child-Protection/app/src/main/res/layout/item_design.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.13652482269503546" />
       </map>
     </option>
   </component>

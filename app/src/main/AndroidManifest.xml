@@ -3,14 +3,14 @@
     package="com.learningandroid.childprotection">
 
     <application
-        android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher_2"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChildProtection">
         <activity
-            android:name=".UI.recyclerView"
+            android:name=".UI.parent_recycler_View_class"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

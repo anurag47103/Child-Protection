@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.learningandroid.childprotection.R;
-import com.learningandroid.childprotection.model.ModelClass;
+import com.learningandroid.childprotection.model.recycler_View_item_Class;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements Filterable {
+public class Parent_recycler_View_Adapter extends RecyclerView.Adapter<Parent_recycler_View_Adapter.ViewHolder> implements Filterable {
 
-    private final List<ModelClass> userList;
-    private List<ModelClass> exampleListFull;
-    public Adapter(List<ModelClass> userList){
+    private final List<recycler_View_item_Class> userList;
+    private List<recycler_View_item_Class> exampleListFull;
+    public Parent_recycler_View_Adapter(List<recycler_View_item_Class> userList){
         this.userList=userList;
         exampleListFull = new ArrayList<>(userList);
     }
@@ -29,13 +29,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
 
     @NonNull
     @Override
-    public Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_design,parent,false);
+    public Parent_recycler_View_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_design,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Parent_recycler_View_Adapter.ViewHolder holder, int position) {
 
         int resource =userList.get(position).getImageview1();
         String name= userList.get(position).getNameText();
@@ -60,13 +60,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<ModelClass> filteredList = new ArrayList<>();
+            List<recycler_View_item_Class> filteredList = new ArrayList<>();
             if(charSequence.length()==0||charSequence==null){
                 filteredList.addAll(exampleListFull);
             }
             else{
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for(ModelClass item: exampleListFull){
+                for(recycler_View_item_Class item: exampleListFull){
                     if(item.getNameText().toLowerCase().trim().contains(filterPattern)){
                         filteredList.add(item);
                     }
