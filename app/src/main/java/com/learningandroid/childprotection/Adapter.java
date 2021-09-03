@@ -5,15 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private List<ModelClass> userList;
+    private final List<ModelClass> userList;
     public Adapter(List<ModelClass> userList){this.userList=userList;}
 
 
@@ -43,11 +43,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     // view holder class
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageview1 ;
-        private TextView nameText;
-        private TextView durationText;
+        private final ImageView imageview1 ;
+        private final TextView nameText;
+        private final TextView durationText;
+        private final TextView dividerText;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -56,12 +57,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             imageview1 = itemView.findViewById(R.id.imageview1);
             nameText= itemView.findViewById(R.id.nameText);
             durationText=itemView.findViewById(R.id.durationText);
+            dividerText=itemView.findViewById(R.id.divider);
         }
 
         public void setData(int resource, String name, String time) {
             imageview1.setImageResource(resource);
             nameText.setText(name);
             durationText.setText(time+" hrs");
+            dividerText.setText("-----------------------------------------------------------------------------------------");
         }
     }
 }

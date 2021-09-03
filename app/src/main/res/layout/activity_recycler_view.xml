@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#839192"
     tools:context=".recyclerView">
 
     <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchview"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:id="@+id/searchview"
+        android:background="#E4FFFFFF"
+        app:defaultQueryHint="Search For Apps"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:defaultQueryHint="Search For Apps"
-        app:iconifiedByDefault="false"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -22,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
-        android:background="#FFFFFF"
+        android:background="#C8FFEB3B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchview"/>
+        app:layout_constraintTop_toBottomOf="@id/searchview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

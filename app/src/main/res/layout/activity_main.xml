@@ -32,13 +32,15 @@
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_marginBottom="50dp"
-            android:background="#00FFFFFF"
+            android:background="#33FFFFFF"
             android:padding="20dp"
             android:text="@string/childbuttontext"
             android:textColor="#020202"
             android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginEnd="1dp"
+            android:layout_marginStart="2dp"
             app:layout_constraintRight_toLeftOf="@+id/guideline" />
 
 
@@ -47,13 +49,15 @@
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_marginBottom="50dp"
-            android:background="#00FFFFFF"
+            android:background="#33FFFFFF"
             android:padding="20dp"
             android:text="@string/parentbuttontext"
             android:textColor="#000000"
             android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/guideline"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="2dp"
             app:layout_constraintRight_toRightOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
