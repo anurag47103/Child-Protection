@@ -17,14 +17,29 @@ public class recyclerView extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     List<ModelClass> userList;
     Adapter adapter;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
+        searchView = (SearchView)findViewById(R.id.searchview);
         initData();
         initRecyclerView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     private void initData() {

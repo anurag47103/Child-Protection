@@ -3,18 +3,25 @@ package com.learningandroid.childprotection;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements Filterable {
 
     private final List<ModelClass> userList;
-    public Adapter(List<ModelClass> userList){this.userList=userList;}
+    private List<ModelClass> exampleListFull;
+    public Adapter(List<ModelClass> userList){
+        this.userList=userList;
+        exampleListFull = new ArrayList<>(userList);
+    }
 
 
 
@@ -40,6 +47,41 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public int getItemCount() {
         return userList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+
+
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<ModelClass> filteredList = new ArrayList<>();
+            if(charSequence.length()==0||charSequence==null){
+                filteredList.addAll(exampleListFull);
+            }
+            else{
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for(ModelClass item: exampleListFull){
+                    if(item.getNameText().toLowerCase().trim().contains(filterPattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            userList.clear();
+            userList.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     // view holder class
