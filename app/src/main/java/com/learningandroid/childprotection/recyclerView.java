@@ -9,23 +9,25 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class recyclerView extends AppCompatActivity {
 
-    SearchView searchView;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     List<ModelClass> userList;
     Adapter adapter;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
-        searchView = (SearchView) findViewById(R.id.searchview);
+        searchView = (SearchView)findViewById(R.id.searchview);
         initData();
         initRecyclerView();
-        //code for search view
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -34,8 +36,7 @@ public class recyclerView extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-//                adapter.
+                adapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -47,30 +48,19 @@ public class recyclerView extends AppCompatActivity {
 
         // temprory list to check if the app is running
         //this is the list which is shown in the recycle view
-        userList.add(new ModelClass(R.drawable.ap,"Amazon Prime","04:23"));
-        userList.add(new ModelClass(R.drawable.fb,"Facebook","05:03"));
-        userList.add(new ModelClass(R.drawable.fm,"Messenger","06:20"));
-        userList.add(new ModelClass(R.drawable.hs,"HotStar","01:12"));
-        userList.add(new ModelClass(R.drawable.ig,"Instagram","01:56"));
-        userList.add(new ModelClass(R.drawable.nf,"Netflix","00:54"));
-        userList.add(new ModelClass(R.drawable.pubg,"PUBG mobile","05:21"));
-        userList.add(new ModelClass(R.drawable.sc,"Snapchat","03:00"));
-        userList.add(new ModelClass(R.drawable.tg,"Telegram","00:55"));
-        userList.add(new ModelClass(R.drawable.wa,"Whatsapp","06:32"));
-        userList.add(new ModelClass(R.drawable.yt,"Youtube","09:23"));
-        userList.add(new ModelClass(R.drawable.ap,"Amazon Prime","04:23"));
-        userList.add(new ModelClass(R.drawable.fb,"Facebook","05:03"));
-        userList.add(new ModelClass(R.drawable.fm,"Messenger","06:20"));
-        userList.add(new ModelClass(R.drawable.hs,"HotStar","01:12"));
-        userList.add(new ModelClass(R.drawable.ig,"Instagram","01:56"));
-        userList.add(new ModelClass(R.drawable.nf,"Netflix","00:54"));
-        userList.add(new ModelClass(R.drawable.pubg,"PUBG mobile","05:21"));
-        userList.add(new ModelClass(R.drawable.sc,"Snapchat","03:00"));
-        userList.add(new ModelClass(R.drawable.tg,"Telegram","00:55"));
-        userList.add(new ModelClass(R.drawable.wa,"Whatsapp","06:32"));
-        userList.add(new ModelClass(R.drawable.yt,"Youtube","09:23"));
-
-
+        for(int i=0;i<5;i++) {
+            userList.add(new ModelClass(R.drawable.ap, "Amazon Prime", "04:23"));
+            userList.add(new ModelClass(R.drawable.fb, "Facebook", "05:03"));
+            userList.add(new ModelClass(R.drawable.fm, "Messenger", "06:20"));
+            userList.add(new ModelClass(R.drawable.hs, "HotStar", "01:12"));
+            userList.add(new ModelClass(R.drawable.ig, "Instagram", "01:56"));
+            userList.add(new ModelClass(R.drawable.nf, "Netflix", "00:54"));
+            userList.add(new ModelClass(R.drawable.pubg, "PUBG mobile", "05:21"));
+            userList.add(new ModelClass(R.drawable.sc, "Snapchat", "03:00"));
+            userList.add(new ModelClass(R.drawable.tg, "Telegram", "00:55"));
+            userList.add(new ModelClass(R.drawable.wa, "Whatsapp", "06:32"));
+            userList.add(new ModelClass(R.drawable.yt, "Youtube", "09:23"));
+        }
 
     }
 

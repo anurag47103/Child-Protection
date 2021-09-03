@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:background="#EFEF7C">
+        android:background="#00EFEF7C">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imageview"
@@ -49,6 +49,16 @@
             android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/border"
+            android:textColor="#558B2F"
+            android:textSize="20sp" />
+
 
     </RelativeLayout>
 </RelativeLayout>
