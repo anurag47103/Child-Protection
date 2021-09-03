@@ -12,7 +12,6 @@ public class usage_Stats_Manager_Main extends Object{
         //todo
         //the backend code to get the realtime data will be written here
 
-
         // temprory list to check if the app is running
         //this is the list which is shown in the recycle view
         List<recycler_View_item_Class> userList = new ArrayList<>();
