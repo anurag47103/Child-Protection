@@ -9,10 +9,10 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class recyclerView extends AppCompatActivity {
 
-    SearchView searchView;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     List<ModelClass> userList;
@@ -21,24 +21,10 @@ public class recyclerView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
-        searchView = (SearchView) findViewById(R.id.searchview);
         initData();
         initRecyclerView();
-        //code for search view
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-//                adapter.
-                return false;
-            }
-        });
     }
 
     private void initData() {
