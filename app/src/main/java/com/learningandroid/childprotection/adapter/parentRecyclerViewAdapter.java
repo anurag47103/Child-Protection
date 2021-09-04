@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.learningandroid.childprotection.R;
-import com.learningandroid.childprotection.model.ModelClass;
+import com.learningandroid.childprotection.model.recyclerViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements Filterable {
+public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecyclerViewAdapter.ViewHolder> implements Filterable {
 
-    private final List<ModelClass> userList;
-    private List<ModelClass> exampleListFull;
-    public Adapter(List<ModelClass> userList){
+    private final List<recyclerViewItem> userList;
+    private List<recyclerViewItem> exampleListFull;
+    public parentRecyclerViewAdapter(List<recyclerViewItem> userList){
         this.userList=userList;
         exampleListFull = new ArrayList<>(userList);
     }
@@ -29,13 +29,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
 
     @NonNull
     @Override
-    public Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_design,parent,false);
+    public parentRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_design,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull parentRecyclerViewAdapter.ViewHolder holder, int position) {
 
         int resource =userList.get(position).getImageview1();
         String name= userList.get(position).getNameText();
@@ -60,13 +60,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<ModelClass> filteredList = new ArrayList<>();
+            List<recyclerViewItem> filteredList = new ArrayList<>();
             if(charSequence.length()==0||charSequence==null){
                 filteredList.addAll(exampleListFull);
             }
             else{
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for(ModelClass item: exampleListFull){
+                for(recyclerViewItem item: exampleListFull){
                     if(item.getNameText().toLowerCase().trim().contains(filterPattern)){
                         filteredList.add(item);
                     }

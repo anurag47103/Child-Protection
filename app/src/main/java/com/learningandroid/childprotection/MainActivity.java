@@ -5,8 +5,9 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.learningandroid.childprotection.UI.recyclerView;
+import com.learningandroid.childprotection.UI.parentRecyclerView;
 import com.learningandroid.childprotection.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     // this method is called when the button is pressed
     public void callrecyclerView() {
-        Intent intent = new Intent(this, recyclerView.class);
+        Intent intent = new Intent(this, parentRecyclerView.class);
         startActivity(intent);
+        Log.i("New Activity opened","parent_recycler_View_class opened");
     }
 }

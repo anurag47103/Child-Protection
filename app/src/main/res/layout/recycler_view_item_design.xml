@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:background="#00EFEF7C">
+        android:background="#BE03DAC5">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imageview"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:text="@string/border"
-            android:textColor="#558B2F"
+            android:textColor="#000000"
             android:textSize="20sp" />
 
 
