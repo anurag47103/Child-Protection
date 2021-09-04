@@ -1,12 +1,5 @@
 package com.learningandroid.childprotection.gettingStats;
-import android.Manifest;
-import android.content.pm.PackageManager;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.learningandroid.childprotection.PermissionHandler;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.model.recyclerViewItem;
 

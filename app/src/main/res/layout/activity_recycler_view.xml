@@ -9,17 +9,29 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchview"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="55dp"
         android:background="#B23EA838"
         android:textAlignment="viewStart"
         app:defaultQueryHint="Search For Apps"
         app:goIcon="@drawable/ic_baseline_search_24"
         app:iconifiedByDefault="false"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/locationtext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/locationtext"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/locatointext"
+        android:textAlignment="center"
+        android:textColor="#212121"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/searchview"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -32,4 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchview"
         />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

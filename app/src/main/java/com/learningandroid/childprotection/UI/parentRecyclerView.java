@@ -1,5 +1,6 @@
 package com.learningandroid.childprotection.UI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -8,10 +9,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
-import com.learningandroid.childprotection.PermissionHandler;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.adapter.parentRecyclerViewAdapter;
 import com.learningandroid.childprotection.gettingStats.usage_Stats_Manager_Main;
@@ -28,15 +34,65 @@ public class parentRecyclerView extends AppCompatActivity  {
     List<recyclerViewItem> userList;
     parentRecyclerViewAdapter parentrecyclerViewAdapter;
     SearchView searchView;
+    TextView locationTextView;
+    LocationManager locationManager;
+    LocationListener locationListener;
+    Double latitude,longitude;
+    String latlong;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
-        PermissionHandler p = new PermissionHandler();
-        p.getLocationAccess(this);
         searchView = findViewById(R.id.searchview);
+        locationTextView = findViewById(R.id.locationtext);
+        //location permission
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                Log.i("Location ",location.toString());
+                latitude=location.getLatitude();
+                longitude=location.getLongitude();
+                latlong=Double.toString(latitude)+"\n"+Double.toString(longitude);
+                locationTextView.setText(latlong);
+            }
+        };
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         initData();//filling data
         initRecyclerView();// setting adapter
         preparesearchbar();//code for search bar
@@ -45,6 +101,17 @@ public class parentRecyclerView extends AppCompatActivity  {
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
 
     private void preparesearchbar() {
         //code for search bar

@@ -7,4 +7,5 @@
     <string name="sample_name_of_app">Amazon prime</string>
     <string name="sample_duration_of_app">02:23 hrs</string>
     <string name="border">-------------------------------------------------------------------------------------</string>
+    <string name="locatointext">LatLng\n00.000000\n00.000000</string>
 </resources>
