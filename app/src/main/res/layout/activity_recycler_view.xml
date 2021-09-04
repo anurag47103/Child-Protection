@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#839192"
-    tools:context=".UI.parent_recycler_View_class">
+    tools:context=".UI.parentRecyclerView">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchview"

@@ -2,26 +2,31 @@ package com.learningandroid.childprotection.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.learningandroid.childprotection.PermissionHandler;
 import com.learningandroid.childprotection.R;
-import com.learningandroid.childprotection.adapter.Parent_recycler_View_Adapter;
+import com.learningandroid.childprotection.adapter.parentRecyclerViewAdapter;
 import com.learningandroid.childprotection.gettingStats.usage_Stats_Manager_Main;
-import com.learningandroid.childprotection.model.recycler_View_item_Class;
+import com.learningandroid.childprotection.model.recyclerViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class parent_recycler_View_class extends AppCompatActivity  {
+public class parentRecyclerView extends AppCompatActivity  {
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
-    List<recycler_View_item_Class> userList;
-    Parent_recycler_View_Adapter parentrecyclerViewAdapter;
+    List<recyclerViewItem> userList;
+    parentRecyclerViewAdapter parentrecyclerViewAdapter;
     SearchView searchView;
 
     @Override
@@ -29,10 +34,14 @@ public class parent_recycler_View_class extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
+        PermissionHandler p = new PermissionHandler();
+        p.getLocationAccess(this);
         searchView = findViewById(R.id.searchview);
         initData();//filling data
         initRecyclerView();// setting adapter
         preparesearchbar();//code for search bar
+
+
 
 
     }
@@ -65,7 +74,7 @@ public class parent_recycler_View_class extends AppCompatActivity  {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        parentrecyclerViewAdapter = new Parent_recycler_View_Adapter(userList);
+        parentrecyclerViewAdapter = new parentRecyclerViewAdapter(userList);
         recyclerView.setAdapter(parentrecyclerViewAdapter);
         parentrecyclerViewAdapter.notifyDataSetChanged();
     }
