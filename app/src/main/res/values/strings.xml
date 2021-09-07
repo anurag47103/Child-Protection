@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Child Protection</string>
-    <string name="Welcome_Text">Welcome\nPlease Select Your Choice</string>
+    <string name="Welcome_Text">Welcome To child Protection app\nPlease enter your Info</string>
     <string name="childbuttontext">Child</string>
     <string name="parentbuttontext">Parent</string>
     <string name="recycler_view_heading">List of apps</string>
@@ -8,4 +8,9 @@
     <string name="sample_duration_of_app">02:23 hrs</string>
     <string name="border">-------------------------------------------------------------------------------------</string>
     <string name="locatointext">LatLng\n00.000000\n00.000000</string>
+    <string name="name">Name</string>
+    <string name="pasword">Pasword</string>
+    <string name="phonenumber">Phone Number</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
 </resources>

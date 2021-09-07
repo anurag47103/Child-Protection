@@ -94,7 +94,7 @@ public class parentRecyclerView extends AppCompatActivity  {
 
     private void launchmap() {
         //launch map
-        Uri uri = Uri.parse("geo:0,0?q=12.8999689,77.5225605");
+        Uri uri = Uri.parse("geo:0,0?q=12.8988756,77.5218414,17z");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW,uri);
         mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
