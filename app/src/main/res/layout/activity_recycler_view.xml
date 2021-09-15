@@ -27,20 +27,60 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchview"
-        />
+        app:layout_constraintTop_toBottomOf="@id/searchview" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/mapbutton"
+        android:id="@+id/morebtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:focusable="true"
         android:backgroundTint="@color/searchcolor"
-        android:src="@drawable/mapicon"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/more"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:contentDescription="TODO" />
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/navigationbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+
+        android:clickable="true"
+        android:focusable="true"
+        android:backgroundTint="@color/searchcolor"
+        app:layout_constraintBottom_toTopOf="@+id/morebtn"
+        app:layout_constraintEnd_toEndOf="@+id/morebtn"
+        app:srcCompat="@drawable/navigationicon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/locationbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+
+        android:clickable="true"
+        android:focusable="true"
+        android:backgroundTint="@color/searchcolor"
+        app:layout_constraintBottom_toTopOf="@+id/navigationbtn"
+        app:layout_constraintEnd_toEndOf="@+id/navigationbtn"
+        app:srcCompat="@drawable/location" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/camerabtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:focusable="true"
+        android:backgroundTint="@color/searchcolor"
+        app:layout_constraintBottom_toTopOf="@+id/locationbtn"
+        app:layout_constraintEnd_toEndOf="@+id/locationbtn"
+        app:srcCompat="@drawable/camera" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

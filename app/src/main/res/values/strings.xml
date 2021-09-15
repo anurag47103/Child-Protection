@@ -9,7 +9,7 @@
     <string name="border">-------------------------------------------------------------------------------------</string>
     <string name="locatointext">LatLng\n00.000000\n00.000000</string>
     <string name="name">Name</string>
-    <string name="pasword">Pasword</string>
+    <string name="pasword">OTP</string>
     <string name="phonenumber">Phone Number</string>
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>

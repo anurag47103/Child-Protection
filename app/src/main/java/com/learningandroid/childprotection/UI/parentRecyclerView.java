@@ -18,6 +18,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.adapter.parentRecyclerViewAdapter;
@@ -37,8 +40,10 @@ public class parentRecyclerView extends AppCompatActivity  {
     SearchView searchView;
     LocationManager locationManager;
     LocationListener locationListener;
-    FloatingActionButton fab;
+    FloatingActionButton morebtn,navigationbtn,locationbtn,camerabtn;
     String Location;
+    Animation rotateforward,ratatebackward,fabclose,fabopen;
+    boolean isoOpen = false;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -55,8 +60,8 @@ public class parentRecyclerView extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
-        searchView = findViewById(R.id.searchview);
-        fab = findViewById(R.id.mapbutton);
+
+        initialise();
 
         //location permission
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -77,16 +82,57 @@ public class parentRecyclerView extends AppCompatActivity  {
         initData();//filling data
         initRecyclerView();// setting adapter
         preparesearchbar();//code for search bar
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabonclick();
+
+
+
+
+    }
+
+    private void fabonclick() {
+        morebtn.setOnClickListener(new View.OnClickListener() {
             //Floating Action Button
             @Override
             public void onClick(View view) {
                 //fab button clicked
                 Log.i("FAB ","Clicked");
-                launchmap();
-
+                if(!isoOpen){
+                    isoOpen=true;
+                    morebtn.startAnimation(rotateforward);
+                    navigationbtn.startAnimation(fabopen);
+                    locationbtn.startAnimation(fabopen);
+                    camerabtn.startAnimation(fabopen);
+                }else {
+                    isoOpen=false;
+                    morebtn.startAnimation(ratatebackward);
+                    navigationbtn.startAnimation(fabclose);
+                    locationbtn.startAnimation(fabclose);
+                    camerabtn.startAnimation(fabclose);
+                }
             }
-        });//Floating Action Button
+        });
+
+        locationbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchmap();
+            }
+        });
+
+
+
+    }
+
+    private void initialise() {
+        searchView = findViewById(R.id.searchview);
+        morebtn = findViewById(R.id.morebtn);
+        navigationbtn =findViewById(R.id.navigationbtn);
+        locationbtn = findViewById(R.id.locationbtn);
+        camerabtn = findViewById(R.id.camerabtn);
+        rotateforward = AnimationUtils.loadAnimation(this,R.anim.rotate_btn_anim);
+        ratatebackward =AnimationUtils.loadAnimation(this,R.anim.rotate_close_anim);
+        fabclose=AnimationUtils.loadAnimation(this,R.anim.from_bottom_anim);
+        fabopen=AnimationUtils.loadAnimation(this,R.anim.to_bottom_anim);
 
 
 
