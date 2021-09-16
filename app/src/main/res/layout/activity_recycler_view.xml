@@ -33,7 +33,7 @@
         android:id="@+id/morebtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="26dp"
         android:focusable="true"
         android:backgroundTint="@color/searchcolor"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -41,9 +42,9 @@ public class parentRecyclerView extends AppCompatActivity  {
     LocationManager locationManager;
     LocationListener locationListener;
     FloatingActionButton morebtn,navigationbtn,locationbtn,camerabtn;
-    String Location;
-    Animation rotateforward,ratatebackward,fabclose,fabopen;
-    boolean isoOpen = false;
+    String Latitude,Longitude;
+    Animation rotateforward,rotatebackward,fabclose,fabopen;
+    boolean isoOpen;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -63,23 +64,10 @@ public class parentRecyclerView extends AppCompatActivity  {
 
         initialise();
 
-        //location permission
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                Log.i("Location ",location.toString());
-                Location=location.toString();
-
-            }
-        };
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
+        
 
         initData();//filling data
+        locationpermission();
         initRecyclerView();// setting adapter
         preparesearchbar();//code for search bar
         fabonclick();
@@ -89,6 +77,25 @@ public class parentRecyclerView extends AppCompatActivity  {
 
     }
 
+    private void locationpermission() {
+        //location permission
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                Log.i("Location ",location.toString());
+                Latitude =Double.toString( location.getLatitude());
+                Longitude = Double.toString(location.getLongitude());
+
+            }
+        };
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+    }
+
     private void fabonclick() {
         morebtn.setOnClickListener(new View.OnClickListener() {
             //Floating Action Button
@@ -96,18 +103,19 @@ public class parentRecyclerView extends AppCompatActivity  {
             public void onClick(View view) {
                 //fab button clicked
                 Log.i("FAB ","Clicked");
+//                Log.i("Location",locate.toString());
                 if(!isoOpen){
-                    isoOpen=true;
                     morebtn.startAnimation(rotateforward);
                     navigationbtn.startAnimation(fabopen);
                     locationbtn.startAnimation(fabopen);
                     camerabtn.startAnimation(fabopen);
+                    isoOpen=true;
                 }else {
-                    isoOpen=false;
-                    morebtn.startAnimation(ratatebackward);
+                    morebtn.startAnimation(rotatebackward);
                     navigationbtn.startAnimation(fabclose);
                     locationbtn.startAnimation(fabclose);
                     camerabtn.startAnimation(fabclose);
+                    isoOpen=false;
                 }
             }
         });
@@ -130,20 +138,21 @@ public class parentRecyclerView extends AppCompatActivity  {
         locationbtn = findViewById(R.id.locationbtn);
         camerabtn = findViewById(R.id.camerabtn);
         rotateforward = AnimationUtils.loadAnimation(this,R.anim.rotate_btn_anim);
-        ratatebackward =AnimationUtils.loadAnimation(this,R.anim.rotate_close_anim);
+        rotatebackward =AnimationUtils.loadAnimation(this,R.anim.rotate_close_anim);
         fabclose=AnimationUtils.loadAnimation(this,R.anim.from_bottom_anim);
         fabopen=AnimationUtils.loadAnimation(this,R.anim.to_bottom_anim);
-
+        isoOpen = false;
 
 
     }
 
     private void launchmap() {
         //launch map
-        Uri uri = Uri.parse("geo:0,0?q=12.8988756,77.5218414,17z");
+        Uri uri = Uri.parse("http://maps.google.com/maps?q=loc:" + Latitude + "," + Longitude);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW,uri);
-        mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
+    }
+    private void openCamera(){
 
     }
 

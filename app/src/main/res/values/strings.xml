@@ -13,4 +13,8 @@
     <string name="phonenumber">Phone Number</string>
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>
+    <string name="title_activity_after_login">afterLogin</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
