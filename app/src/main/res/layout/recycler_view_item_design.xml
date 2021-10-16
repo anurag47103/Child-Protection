@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:background="#BE03DAC5">
 
         <androidx.cardview.widget.CardView
@@ -43,21 +43,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/nameText"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="-1dp"
             android:layout_toEndOf="@+id/imageview"
             android:text="@string/sample_duration_of_app"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="@string/border"
-            android:textColor="#000000"
-            android:textSize="20sp" />
 
 
     </RelativeLayout>

@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +18,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,10 +28,15 @@ import com.learningandroid.childprotection.gettingStats.usage_Stats_Manager_Main
 import com.learningandroid.childprotection.model.recyclerViewItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class parentRecyclerView extends AppCompatActivity  {
+
+    UsageStatsManager usageStatsManager;
+    parentRecyclerViewAdapter parentRecyclerViewAdapter;
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
@@ -55,6 +63,45 @@ public class parentRecyclerView extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
+
+//        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+//        startActivity(intent);
+
+
+        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        Log.d("check", "onCreate: " + usageStatsManager.getAppStandbyBucket());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        List<UsageStats> queryUsageStats = usageStatsManager
+                .queryUsageStats(UsageStatsManager.INTERVAL_DAILY, cal.getTimeInMillis(),
+                        System.currentTimeMillis());
+
+        Log.d("check", cal.getTimeInMillis() + "  onCreate: hogaya" + System.currentTimeMillis());
+        userList = new ArrayList<>();
+        for(UsageStats x : queryUsageStats) {
+                long tt = x.getTotalTimeInForeground();
+                long min = TimeUnit.MILLISECONDS.toMinutes(tt);
+                long hrs = TimeUnit.MILLISECONDS.toHours(tt);
+
+                String time = hrs + ":" + min;
+                if(min > 10) {
+                    userList.add(new recyclerViewItem(R.drawable.ap, x.getPackageName(),time));
+                    Log.d("check", x.getTotalTimeInForeground() +  "usageStats   " + x.getPackageName());
+                }
+
+
+        }
+
+        recyclerView = findViewById(R.id.recyclerview);
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        parentrecyclerViewAdapter = new parentRecyclerViewAdapter(userList);
+        recyclerView.setAdapter(parentrecyclerViewAdapter);
+        parentrecyclerViewAdapter.notifyDataSetChanged();
+
+
+
         searchView = findViewById(R.id.searchview);
         fab = findViewById(R.id.mapbutton);
 
@@ -74,8 +121,8 @@ public class parentRecyclerView extends AppCompatActivity  {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
 
-        initData();//filling data
-        initRecyclerView();// setting adapter
+//        initData();//filling data
+//        initRecyclerView();// setting adapter
         preparesearchbar();//code for search bar
         fab.setOnClickListener(new View.OnClickListener() {
             //Floating Action Button
@@ -119,8 +166,7 @@ public class parentRecyclerView extends AppCompatActivity  {
     private void initData() {
         //filling data
         userList = new ArrayList<>();
-        usage_Stats_Manager_Main stats_manager = new usage_Stats_Manager_Main();
-        userList = stats_manager.getuserlist();
+
     }
 
     private void initRecyclerView() {

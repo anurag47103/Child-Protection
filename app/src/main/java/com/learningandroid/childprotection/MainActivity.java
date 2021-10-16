@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // this method is called when the button is pressed
+    // this method is called when the parent button is pressed
     public void callrecyclerView() {
         Intent intent = new Intent(this, parentRecyclerView.class);
         startActivity(intent);

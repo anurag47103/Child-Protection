@@ -20,17 +20,17 @@ public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecycl
 
     private final List<recyclerViewItem> userList;
     private List<recyclerViewItem> exampleListFull;
+
     public parentRecyclerViewAdapter(List<recyclerViewItem> userList){
         this.userList=userList;
         exampleListFull = new ArrayList<>(userList);
     }
 
-
-
     @NonNull
     @Override
     public parentRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_design,parent,false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recycler_view_item_design,parent,false);
         return new ViewHolder(view);
     }
 
@@ -39,10 +39,9 @@ public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecycl
 
         int resource =userList.get(position).getImageview1();
         String name= userList.get(position).getNameText();
-        String time = userList.get(position).getDurationText();
+        String time = userList.get(position).getDurationText().toString();
 
         holder.setData(resource,name,time);
-
     }
 
     @Override
@@ -52,8 +51,6 @@ public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecycl
 
     @Override
     public Filter getFilter() {
-
-
         return exampleFilter;
     }
 
@@ -92,8 +89,6 @@ public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecycl
         private final ImageView imageview1 ;
         private final TextView nameText;
         private final TextView durationText;
-        private final TextView dividerText;
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,14 +96,12 @@ public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecycl
             imageview1 = itemView.findViewById(R.id.imageview1);
             nameText= itemView.findViewById(R.id.nameText);
             durationText=itemView.findViewById(R.id.durationText);
-            dividerText=itemView.findViewById(R.id.divider);
         }
 
         public void setData(int resource, String name, String time) {
             imageview1.setImageResource(resource);
             nameText.setText(name);
             durationText.setText(time+" hrs");
-            dividerText.setText("-----------------------------------------------------------------------------------------");
         }
     }
 }
