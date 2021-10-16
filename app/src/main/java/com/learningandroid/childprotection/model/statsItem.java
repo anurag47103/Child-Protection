@@ -1,13 +1,13 @@
 package com.learningandroid.childprotection.model;
 // this class is the structure of the items in our recycler view
-public class recyclerViewItem {
+public class statsItem {
     private final int imageview1;
     private final String nameText;
     private final String durationText;
 
     // constructor
 
-    public recyclerViewItem(int imageview1, String nameText, String durationText){
+    public statsItem(int imageview1, String nameText, String durationText){
         this.imageview1=imageview1;
         this.nameText=nameText;
         this.durationText=durationText;

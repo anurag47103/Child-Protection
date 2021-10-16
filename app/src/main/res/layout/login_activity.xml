@@ -106,16 +106,15 @@
             app:layout_constraintTop_toBottomOf="@id/layout2">
 
 
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/ParentButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:background="@drawable/button"
                 android:text="Login"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_margin="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 

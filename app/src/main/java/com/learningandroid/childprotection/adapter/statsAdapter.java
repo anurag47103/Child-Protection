@@ -11,31 +11,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.learningandroid.childprotection.R;
-import com.learningandroid.childprotection.model.recyclerViewItem;
+import com.learningandroid.childprotection.model.statsItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecyclerViewAdapter.ViewHolder> implements Filterable {
+public class statsAdapter extends RecyclerView.Adapter<statsAdapter.ViewHolder> implements Filterable {
 
-    private final List<recyclerViewItem> userList;
-    private List<recyclerViewItem> exampleListFull;
+    private final List<statsItem> userList;
+    private List<statsItem> exampleListFull;
 
-    public parentRecyclerViewAdapter(List<recyclerViewItem> userList){
+    public statsAdapter(List<statsItem> userList){
         this.userList=userList;
         exampleListFull = new ArrayList<>(userList);
     }
 
     @NonNull
     @Override
-    public parentRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public statsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_view_item_design,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull parentRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull statsAdapter.ViewHolder holder, int position) {
 
         int resource =userList.get(position).getImageview1();
         String name= userList.get(position).getNameText();
@@ -57,13 +57,13 @@ public class parentRecyclerViewAdapter extends RecyclerView.Adapter<parentRecycl
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<recyclerViewItem> filteredList = new ArrayList<>();
+            List<statsItem> filteredList = new ArrayList<>();
             if(charSequence.length()==0||charSequence==null){
                 filteredList.addAll(exampleListFull);
             }
             else{
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for(recyclerViewItem item: exampleListFull){
+                for(statsItem item: exampleListFull){
                     if(item.getNameText().toLowerCase().trim().contains(filterPattern)){
                         filteredList.add(item);
                     }

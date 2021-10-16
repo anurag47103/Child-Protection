@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.parentRecyclerView"
+            android:name=".Activities.statsView"
             android:exported="true" />
         <activity
             android:name=".Activities.loginActivity"
