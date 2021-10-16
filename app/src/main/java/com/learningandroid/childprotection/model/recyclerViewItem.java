@@ -4,7 +4,6 @@ public class recyclerViewItem {
     private final int imageview1;
     private final String nameText;
     private final String durationText;
-    private String dividerText;
 
     // constructor
 
@@ -28,7 +27,4 @@ public class recyclerViewItem {
         return durationText;
     }
 
-    public String getdividerText() {
-        return dividerText;
-    }
 }

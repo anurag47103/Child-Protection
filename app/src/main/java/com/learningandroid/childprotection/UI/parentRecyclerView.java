@@ -21,9 +21,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.adapter.parentRecyclerViewAdapter;
+import com.learningandroid.childprotection.commonUtils.commonUtil;
 import com.learningandroid.childprotection.gettingStats.usage_Stats_Manager_Main;
 import com.learningandroid.childprotection.model.recyclerViewItem;
 
@@ -63,9 +66,9 @@ public class parentRecyclerView extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_recycler_view);
-
 //        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
 //        startActivity(intent);
+
 
 
         usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
@@ -105,15 +108,13 @@ public class parentRecyclerView extends AppCompatActivity  {
         searchView = findViewById(R.id.searchview);
         fab = findViewById(R.id.mapbutton);
 
-        //location permission
+        //location op
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                Log.i("Location ",location.toString());
-                Location=location.toString();
+        locationListener = location -> {
+//            Log.i("Location ",location.toString());
+            Location=location.toString();
+            commonUtil.location=location;
 
-            }
         };
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
@@ -129,7 +130,6 @@ public class parentRecyclerView extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 //fab button clicked
-                Log.i("FAB ","Clicked");
                 launchmap();
 
             }
@@ -141,10 +141,17 @@ public class parentRecyclerView extends AppCompatActivity  {
 
     private void launchmap() {
         //launch map
-        Uri uri = Uri.parse("geo:0,0?q=12.8999689,77.5225605");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW,uri);
-        mapIntent.setPackage("com.google.android.apps.maps");
+        if(commonUtil.location!=null) {
+            String latitude = commonUtil.location.getLatitude() + "";
+            String longitude = commonUtil.location.getLongitude() + "";
+            Uri uri = Uri.parse("geo:0,0?q=" + latitude + "," + longitude);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+            mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
+        }
+        else {
+            Toast.makeText(this, "Wait for app to load map try in a few seconds.", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
