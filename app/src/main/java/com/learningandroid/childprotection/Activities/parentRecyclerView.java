@@ -1,6 +1,5 @@
-package com.learningandroid.childprotection.UI;
+package com.learningandroid.childprotection.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -13,9 +12,6 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -23,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.adapter.parentRecyclerViewAdapter;
@@ -32,45 +30,34 @@ import com.learningandroid.childprotection.model.recyclerViewItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class parentRecyclerView extends AppCompatActivity  {
 
     UsageStatsManager usageStatsManager;
-    parentRecyclerViewAdapter parentRecyclerViewAdapter;
-
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     List<recyclerViewItem> userList;
     parentRecyclerViewAdapter parentrecyclerViewAdapter;
     SearchView searchView;
-    LocationManager locationManager;
-    LocationListener locationListener;
     FloatingActionButton fab;
-    String Location;
+    private FusedLocationProviderClient fusedLocationClient;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        }
-    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).hide();
+
         setContentView(R.layout.activity_recycler_view);
 //        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
 //        startActivity(intent);
 
 
+        init();
 
-        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+
         Log.d("check", "onCreate: " + usageStatsManager.getAppStandbyBucket());
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -1);
@@ -94,7 +81,7 @@ public class parentRecyclerView extends AppCompatActivity  {
 
         }
 
-        recyclerView = findViewById(R.id.recyclerview);
+
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -104,37 +91,46 @@ public class parentRecyclerView extends AppCompatActivity  {
 
 
 
-        searchView = findViewById(R.id.searchview);
-        fab = findViewById(R.id.mapbutton);
 
-        //location op
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = location -> {
-//            Log.i("Location ",location.toString());
-            Location=location.toString();
-            commonUtil.location=location;
 
-        };
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
 
-//        initData();//filling data
-//        initRecyclerView();// setting adapter
         preparesearchbar();//code for search bar
         fab.setOnClickListener(new View.OnClickListener() {
             //Floating Action Button
             @Override
             public void onClick(View view) {
                 //fab button clicked
-                launchmap();
+                lookforLocationPermission();
 
             }
-        });//Floating Action Button
+        });
 
 
+
+    }
+
+    private void lookforLocationPermission(){
+
+        if (ContextCompat.checkSelfPermission(parentRecyclerView.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+                if (location != null) {
+                    commonUtil.location = location;
+                }
+                launchmap();
+            });
+        } else {
+            Toast.makeText(this, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(parentRecyclerView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+
+        }
+    }
+
+    private void init(){
+        searchView = findViewById(R.id.searchview);
+        fab = findViewById(R.id.mapbutton);
+        recyclerView = findViewById(R.id.recyclerview);
+        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
     }
 
@@ -169,20 +165,6 @@ public class parentRecyclerView extends AppCompatActivity  {
         });
     }
 
-    private void initData() {
-        //filling data
-        userList = new ArrayList<>();
 
-    }
 
-    private void initRecyclerView() {
-        // setting adapter
-        recyclerView = findViewById(R.id.recyclerview);
-        layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        parentrecyclerViewAdapter = new parentRecyclerViewAdapter(userList);
-        recyclerView.setAdapter(parentrecyclerViewAdapter);
-        parentrecyclerViewAdapter.notifyDataSetChanged();
-    }
 }

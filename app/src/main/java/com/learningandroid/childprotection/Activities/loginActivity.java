@@ -1,4 +1,4 @@
-package com.learningandroid.childprotection.UI;
+package com.learningandroid.childprotection.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -10,7 +10,7 @@ import android.util.Log;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class loginActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 /*
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(loginActivity.this, R.layout.activity_main);
 
         binding.ParentButton.setOnClickListener(view -> callrecyclerView());
 
