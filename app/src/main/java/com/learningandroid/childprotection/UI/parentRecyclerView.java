@@ -27,7 +27,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.adapter.parentRecyclerViewAdapter;
 import com.learningandroid.childprotection.commonUtils.commonUtil;
-import com.learningandroid.childprotection.gettingStats.usage_Stats_Manager_Main;
 import com.learningandroid.childprotection.model.recyclerViewItem;
 
 import java.util.ArrayList;
