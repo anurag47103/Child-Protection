@@ -33,6 +33,6 @@ public class loginActivity extends AppCompatActivity {
     public void callrecyclerView() {
         Intent intent = new Intent(this, parentRecyclerView.class);
         startActivity(intent);
-        Log.i("New Activity opened","parent_recycler_View_class opened");
+        finish();
     }
 }
