@@ -1,4 +1,4 @@
-package com.learningandroid.childprotection;
+package com.learningandroid.childprotection.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.learningandroid.childprotection.UI.parentRecyclerView;
+import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
