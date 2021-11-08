@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "70204233838",
+    "project_id": "child-protection-1911",
+    "storage_bucket": "child-protection-1911.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70204233838:android:b923b97275e8ea1c102e7f",
+        "android_client_info": {
+          "package_name": "com.learningandroid.childprotection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70204233838-28hnnvptn55adppf34d8mvg16goqcsnq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO8yqKfZsZRC2qRefMVKR6YJOYlQleWZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70204233838-28hnnvptn55adppf34d8mvg16goqcsnq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
