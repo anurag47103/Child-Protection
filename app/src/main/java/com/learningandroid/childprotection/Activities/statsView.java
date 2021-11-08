@@ -18,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,6 +35,7 @@ import com.learningandroid.childprotection.model.statsItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class statsView extends AppCompatActivity {
@@ -118,14 +120,24 @@ public class statsView extends AppCompatActivity {
                 for(UsageStats x : queryUsageStats) {
                     long tt = x.getTotalTimeInForeground();
 
+
+                    String s= x.getPackageName();
+                    if (commonUtil.applist.containsKey(s)) {
+                        Long time = commonUtil.applist.get(s)+tt;
+                        commonUtil.applist.put(s,time);
+                    }else commonUtil.applist.put(s,0L);
+
+                }
+                for (Map.Entry<String,Long> entry : commonUtil.applist.entrySet()) {
+
+                    String name = entry.getKey();
+                    Long tt = entry.getValue();
                     long min = TimeUnit.MILLISECONDS.toMinutes(tt)%60;
                     long hrs = TimeUnit.MILLISECONDS.toHours(tt);
 
                     String time = hrs + ":" + min;
-                    if(min > 10||hrs>0) {
-                        userList.add(new statsItem(R.drawable.ap, x.getPackageName(),time));
-//                        Log.d("check", x.getTotalTimeInForeground() +  "usageStats   " + x.getPackageName());
-                    }
+                    if(hrs>0||min>10)
+                    userList.add(new statsItem(R.drawable.ap, name, time + ""));
                 }
                 return true;
             }
@@ -154,6 +166,7 @@ public class statsView extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 
     private void launchmap() {
