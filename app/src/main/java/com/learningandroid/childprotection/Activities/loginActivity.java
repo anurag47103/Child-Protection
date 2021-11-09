@@ -1,15 +1,21 @@
 package com.learningandroid.childprotection.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.learningandroid.childprotection.R;
@@ -18,10 +24,11 @@ import java.util.concurrent.TimeUnit;
 
 public class loginActivity extends AppCompatActivity {
 
-    private EditText phone,otp;
-    private Button signin;
-    private Boolean getOtp;
-    private Editable phoneNumber;
+    private EditText phone;
+    private FirebaseAuth mAuth;
+    private String TAG ="Tag";
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    
 
 
     @Override
@@ -29,48 +36,60 @@ public class loginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-        init();
-        signin.setText("Get Otp");
-        otp.setAlpha(0);
-
-        signin.setOnClickListener(new View.OnClickListener() {
+        phone = findViewById(R.id.phonenumber);
+        mAuth = FirebaseAuth.getInstance();
+        
+        findViewById(R.id.getotp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getOtp){
-                    phoneNumber= phone.getText();
-                    if(phoneNumber.toString().length()>9) {
-                        getOtp = false;
-                        signin.setText("Submit");
-                        otp.animate().alpha(1).setDuration(500);
-                        phone.setActivated(false);
-                        getotp(phoneNumber.toString());
-                    }
-                    else Toast.makeText(loginActivity.this, "Enter a valid number", Toast.LENGTH_SHORT).show();
-                }else{
-                    //authanticate
-                    callrecyclerView();
-                }
+
+                
+                String s = phone.getText().toString();
+                if(s.length()==10){
+                    sendOtp();
+                }else Toast.makeText(loginActivity.this, "Enter valid number", Toast.LENGTH_SHORT).show();
             }
         });
+        
 
     }
 
-    private void getotp(String s){
+    private void sendOtp() {
 
+
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential credential) {
+
+                
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                Toast.makeText(loginActivity.this, "Enter Number Again", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(@NonNull String verificationId,
+                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                Intent i = new Intent(loginActivity.this,otpActivity.class);
+                i.putExtra("phone",phone.getText().toString());
+                i.putExtra("verificationId",verificationId);
+                startActivity(i);
+            }
+        };
+
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(mAuth)
+                        .setPhoneNumber("+91"+phone.getText().toString())       // Phone number to verify
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(this)                 // Activity (for callback binding)
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .build();
+
+        PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
-    private void init(){
-        phone = findViewById(R.id.phonenumber);
-        otp = findViewById(R.id.otp);
-        signin = findViewById(R.id.ParentButton);
-        getOtp = true;
 
-    }
-
-    // this method is called when the parent button is pressed
-    public void callrecyclerView() {
-        Intent intent = new Intent(this, statsView.class);
-        startActivity(intent);
-        finish();
-    }
 }
