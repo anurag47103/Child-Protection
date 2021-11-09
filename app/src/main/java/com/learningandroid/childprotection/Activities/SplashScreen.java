@@ -42,7 +42,9 @@ public class SplashScreen extends AppCompatActivity {
         mWaitHandler.postDelayed(()->{
             try{
                 heading.animate().alpha(0).setDuration(500);
-                Intent i = new Intent(this, loginActivity.class);
+                Intent i;
+                if(false) i = new Intent(this, loginActivity.class);
+                else     i= new Intent(this,statsView.class);
                 startActivity(i);
                 finish();
             }catch (Exception e){

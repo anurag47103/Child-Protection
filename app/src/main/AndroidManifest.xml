@@ -19,7 +19,9 @@
         android:theme="@style/Theme.ChildProtection">
         <activity
             android:name=".Activities.otpActivity"
-            android:exported="false" />
+            android:exported="false" >
+
+        </activity>
 
         <activity
             android:name=".Activities.SplashScreen"
@@ -29,6 +31,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".Activities.statsView"

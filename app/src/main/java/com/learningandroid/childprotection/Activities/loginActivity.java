@@ -79,7 +79,7 @@ public class loginActivity extends AppCompatActivity {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
                         .setPhoneNumber("+91"+phone.getText().toString())       // Phone number to verify
-                        .setTimeout(6L, TimeUnit.SECONDS) // Timeout and unit
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
                         .setActivity(this)                 // Activity (for callback binding)
                         .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                         .build();

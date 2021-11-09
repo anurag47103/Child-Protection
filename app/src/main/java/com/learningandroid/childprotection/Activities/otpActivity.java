@@ -69,7 +69,7 @@ public class otpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 //otp successful
-
+                                Toast.makeText(otpActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 
                                 callrecyclerView();
                             }

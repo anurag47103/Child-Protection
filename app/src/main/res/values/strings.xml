@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">Child Protection</string>
-    <string name="Welcome_Text">Welcome\nPlease Select Your Choice</string>
+    <string name="Welcome_Text">Welcome\nPlease enter your phone number</string>
     <string name="childbuttontext">Child</string>
     <string name="parentbuttontext">Parent</string>
     <string name="recycler_view_heading">List of apps</string>
     <string name="sample_name_of_app">Amazon prime</string>
     <string name="sample_duration_of_app">02:23 hrs</string>
-    <string name="border">-------------------------------------------------------------------------------------</string>
     <string name="locatointext">LatLng\n00.000000\n00.000000</string>
     <string name="title_activity_login2">LoginActivity2</string>
     <string name="prompt_email">Email</string>
