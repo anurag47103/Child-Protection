@@ -1,5 +1,6 @@
 package com.learningandroid.childprotection.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.helper.OTP_Receiver;
 
@@ -27,11 +34,7 @@ public class otpActivity extends AppCompatActivity {
         verificationId = getIntent().getStringExtra("verificationId");
         otp = findViewById(R.id.otp);
         findViewById(R.id.verify).setOnClickListener(view -> {
-            if(verify()){
-                callrecyclerView();
-            }else {
-                Toast.makeText(this, "Please enter valid otp", Toast.LENGTH_SHORT).show();
-            }
+           verify();
         });
 
         autoOtpreciever();
@@ -54,9 +57,31 @@ public class otpActivity extends AppCompatActivity {
         });
     }
 
-    private boolean verify() {
+    private void verify() {
+        String s = otp.getText().toString();
+        if(s.length()==6&&verificationId!=null){
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId,s);
+            FirebaseAuth
+                    .getInstance()
+                    .signInWithCredential(credential)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                //otp successful
 
-        return true;
+
+                                callrecyclerView();
+                            }
+                            else{
+                                Toast.makeText(otpActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+        else{
+            Toast.makeText(otpActivity.this, "6 digit otp please", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
