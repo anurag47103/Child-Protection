@@ -61,7 +61,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/edittext"
-                android:hint="Pin"
+                android:hint="OTP"
                 android:inputType="number"
                 android:padding="10dp"
                 android:textAlignment="viewStart"
