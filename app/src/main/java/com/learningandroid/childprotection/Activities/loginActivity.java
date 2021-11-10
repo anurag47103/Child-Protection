@@ -34,15 +34,13 @@ public class loginActivity extends AppCompatActivity {
         phone = findViewById(R.id.phonenumber);
         mAuth = FirebaseAuth.getInstance();
         
-        findViewById(R.id.getotp).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.getotp).setOnClickListener(view -> {
 
-                
-                String s = phone.getText().toString();
-                if(s.length()==10){
-                    sendOtp();
-                }else Toast.makeText(loginActivity.this, "Enter valid number", Toast.LENGTH_SHORT).show();
+            String s = phone.getText().toString();
+            if(s.length()==10){
+                sendOtp();
+            }else{
+                phone.setError("Please enter a valid 10 digit number");
             }
         });
         

@@ -52,7 +52,7 @@ public class otpActivity extends AppCompatActivity {
 
             @Override
             public void onOtptimeout() {
-                Toast.makeText(otpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(otpActivity.this, "Timeout", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -74,7 +74,7 @@ public class otpActivity extends AppCompatActivity {
                                 callrecyclerView();
                             }
                             else{
-                                Toast.makeText(otpActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                                otp.setError("Enter a valid 6 digit OTP");
                             }
                         }
                     });
