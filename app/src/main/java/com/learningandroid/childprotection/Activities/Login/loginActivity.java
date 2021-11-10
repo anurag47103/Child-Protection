@@ -1,11 +1,10 @@
-package com.learningandroid.childprotection.Activities;
+package com.learningandroid.childprotection.Activities.Login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.firebase.FirebaseException;
@@ -67,7 +66,7 @@ public class loginActivity extends AppCompatActivity {
             @Override
             public void onCodeSent(@NonNull String verificationId,
                                    @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                Intent i = new Intent(loginActivity.this,otpActivity.class);
+                Intent i = new Intent(loginActivity.this, otpActivity.class);
                 i.putExtra("phone",phone.getText().toString());
                 i.putExtra("verificationId",verificationId);
                 startActivity(i);

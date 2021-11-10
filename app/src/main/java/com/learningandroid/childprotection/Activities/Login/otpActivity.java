@@ -1,4 +1,4 @@
-package com.learningandroid.childprotection.Activities;
+package com.learningandroid.childprotection.Activities.Login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.learningandroid.childprotection.Activities.statsView;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.helper.OTP_Receiver;
 
@@ -80,7 +80,7 @@ public class otpActivity extends AppCompatActivity {
                     });
         }
         else{
-            Toast.makeText(otpActivity.this, "6 digit otp please", Toast.LENGTH_SHORT).show();
+            otp.setError("Enter a valid 6 digit OTP");
         }
     }
 

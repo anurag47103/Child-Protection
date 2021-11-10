@@ -1,27 +1,16 @@
 package com.learningandroid.childprotection.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.learningandroid.childprotection.Activities.Login.loginActivity;
 import com.learningandroid.childprotection.R;
-import com.learningandroid.childprotection.commonUtils.commonUtil;
 
 public class SplashScreen extends AppCompatActivity {
 
