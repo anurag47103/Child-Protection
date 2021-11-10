@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class loginActivity extends AppCompatActivity {
 
     private EditText phone;
-    private FirebaseAuth mAuth;
     private String TAG ="Tag";
+    private FirebaseAuth mAuth;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     
 
@@ -46,6 +46,8 @@ public class loginActivity extends AppCompatActivity {
 
     }
 
+
+    //code to send otp through firebase
     private void sendOtp() {
 
 
