@@ -48,7 +48,7 @@ public class signup2 extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private Button btn;
     private DocumentReference mDocRef;
-    private final String uploadMessage ="Upload Results";
+    private final String tag ="Upload Results";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class signup2 extends AppCompatActivity {
         otpVerification();
         btn.setOnClickListener(view -> verifynumber());
 
+        call();
     }
 
     private void verifynumber() {
@@ -135,7 +136,7 @@ public class signup2 extends AppCompatActivity {
                 {
                     Log.d("OTP",e.toString());
                     Toast.makeText(signup2.this, "Error sending OTP try again later", Toast.LENGTH_LONG).show();
-                    finish();
+//                    finish();
                 }
                 else{
                     verified[index]=false;
@@ -171,38 +172,57 @@ public class signup2 extends AppCompatActivity {
     private void call() {
         // all otp verified
         // numbers with names stored now save it to database
-        System.out.println("ffffffffffffffffffffff");
+
+        Log.d(tag,"Call method called");
+
+
+
 
         Random rnd = new Random();
-        String grpId=rnd.nextInt(10)+"."+rnd.nextInt(10)+"."+java.time.Clock.systemUTC().instant().toString().trim();
-        HashMap<String , userDetails> data = new HashMap<>();
+        String grpId=phones[0]+"."+java.time.Clock.systemUTC().instant().toString().trim();
+        HashMap<String , String> data = new HashMap<>();
         for(int i=0;i<5;i++){
             Character r;  if(i==0||i==1)r='p';  else r='c';
             userDetails temp = new userDetails(names[i],"+91"+phones[i],r,grpId,null);
             if(verified[i])
-                data.put("+91"+phones[i],temp);
+                data.put("+91"+phones[i],temp.toString());
         }
 
+        mDocRef = FirebaseFirestore.getInstance().document("Home/Contacts");
         mDocRef.set(data).addOnCompleteListener(task -> {
             if(!task.isSuccessful()){
-                Log.d(uploadMessage,"Upload Failed", task.getException());
-                startActivity(new Intent(this, SplashScreen.class));
+                Log.d(tag,"Upload Failed", task.getException());
+//                startActivity(new Intent(this, SplashScreen.class));
             }else {
-                Log.d(uploadMessage,"Upload Successful");
+                Log.d(tag,"Upload Successful");
+                createGroup(grpId);
             }
         });
+    }
 
+    private void createGroup( String grpId) {
 
+        HashMap<String, String> grp = new HashMap<>();
+        String con = "{[";
+        for(int i=0;i<5;i++){
+            if(verified[i]) con+=phones[i]+",";
+        }
+        con = con.substring(0,con.length()-1);
+        con+="]}";
+        grp.put(grpId,con);
+        mDocRef = FirebaseFirestore.getInstance().document("Home/Groups");
+        mDocRef.set(grp).addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
+                Log.d(tag,"Upload Failed", task.getException());
+//                startActivity(new Intent(this, SplashScreen.class));
+            }else {
+                Log.d(tag,"Upload Successful");
+//                Intent i = new Intent(signup2.this, statsView.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
 
-
-
-
-
-
-
-        Intent i = new Intent(signup2.this, statsView.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+            }
+        });
     }
 
     private void init(){
@@ -243,7 +263,7 @@ public class signup2 extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         verified= new boolean[5];
-        mDocRef = FirebaseFirestore.getInstance().document("Home/Contacts");
+
 
 
     }

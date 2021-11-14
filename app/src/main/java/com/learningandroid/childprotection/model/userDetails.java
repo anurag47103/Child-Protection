@@ -57,4 +57,15 @@ public class userDetails {
         this.grpId = grpId;
         this.usageStats = usageStats;
     }
+
+    @Override
+    public String toString() {
+        return "userDetails{" +
+                "name='" + name + '\'' +
+                ", number='" + number + '\'' +
+                ", role=" + role +
+                ", grpId='" + grpId + '\'' +
+                ", usageStats=" + usageStats +
+                '}';
+    }
 }

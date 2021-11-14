@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+
     tools:context=".Activities.newUser.signup1">
 
     <TextView
@@ -70,6 +72,7 @@
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
                     android:hint="Required"
+                    android:textColor="@color/textColor"
                     android:inputType="textPersonName"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="10dp"
@@ -102,6 +105,7 @@
                     android:id="@+id/parentNumber1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
@@ -139,6 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/textColor"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
                     android:inputType="textPersonName"
@@ -173,6 +178,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/textColor"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
                     android:inputType="phone"
@@ -207,6 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
+                    android:textColor="@color/textColor"
                     android:background="@drawable/edittext"
                     android:hint="Required"
                     android:inputType="textPersonName"
@@ -241,6 +248,7 @@
                     android:id="@+id/childNumber1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
@@ -276,6 +284,7 @@
                 <EditText
                     android:id="@+id/childName2"
                     android:layout_width="match_parent"
+                    android:textColor="@color/textColor"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
@@ -311,6 +320,7 @@
                     android:id="@+id/childNumber3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
@@ -344,6 +354,7 @@
                 <EditText
                     android:id="@+id/childName3"
                     android:layout_width="match_parent"
+                    android:textColor="@color/textColor"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
@@ -380,6 +391,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/textColor"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/edittext"
                     android:inputType="phone"
