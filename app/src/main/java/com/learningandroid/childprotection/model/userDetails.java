@@ -1,71 +1,70 @@
 package com.learningandroid.childprotection.model;
 
-import java.util.HashMap;
+import android.location.Location;
+import java.util.List;
 
 public class userDetails {
-    private String name;
-    private String number;
-    private Character role;
-    private String grpId;
-    private HashMap<String,String> usageStats;
+    private String Contact;
+    private String GroupId;
+    private Location Location;
+    private String Name;
+    private String Role;
+    private List<statsItem> Stats;
 
+    public userDetails(String contact, String groupId, android.location.Location location, String name, String role, List<statsItem> stats) {
+        Contact = contact;
+        GroupId = groupId;
+        Location = location;
+        Name = name;
+        Role = role;
+        Stats = stats;
+    }
+
+    public String getContact() {
+        return Contact;
+    }
+
+    public void setContact(String contact) {
+        Contact = contact;
+    }
+
+    public String getGroupId() {
+        return GroupId;
+    }
+
+    public void setGroupId(String groupId) {
+        GroupId = groupId;
+    }
+
+    public android.location.Location getLocation() {
+        return Location;
+    }
+
+    public void setLocation(android.location.Location location) {
+        Location = location;
+    }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
-    public String getNumber() {
-        return number;
+    public String getRole() {
+        return Role;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setRole(String role) {
+        Role = role;
     }
 
-    public Character getRole() {
-        return role;
+    public List<statsItem> getStats() {
+        return Stats;
     }
 
-    public void setRole(Character role) {
-        this.role = role;
-    }
-
-    public String getGrpId() {
-        return grpId;
-    }
-
-    public void setGrpId(String grpId) {
-        this.grpId = grpId;
-    }
-
-    public HashMap<String, String> getUsageStats() {
-        return usageStats;
-    }
-
-    public void setUsageStats(HashMap<String, String> usageStats) {
-        this.usageStats = usageStats;
-    }
-
-    public userDetails(String name, String number, Character role, String grpId, HashMap<String, String> usageStats) {
-        this.name = name;
-        this.number = number;
-        this.role = role;
-        this.grpId = grpId;
-        this.usageStats = usageStats;
-    }
-
-    @Override
-    public String toString() {
-        return "userDetails{" +
-                "name='" + name + '\'' +
-                ", number='" + number + '\'' +
-                ", role=" + role +
-                ", grpId='" + grpId + '\'' +
-                ", usageStats=" + usageStats +
-                '}';
+    public void setStats(List<statsItem> stats) {
+        Stats = stats;
     }
 }

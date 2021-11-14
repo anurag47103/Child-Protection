@@ -13,10 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
@@ -24,15 +21,11 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.learningandroid.childprotection.Activities.Login.loginActivity;
-import com.learningandroid.childprotection.Activities.Login.otpActivity;
-import com.learningandroid.childprotection.Activities.SplashScreen;
-import com.learningandroid.childprotection.Activities.statsView;
 import com.learningandroid.childprotection.R;
-import com.learningandroid.childprotection.model.userDetails;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class signup2 extends AppCompatActivity {
 
@@ -60,7 +53,6 @@ public class signup2 extends AppCompatActivity {
         otpVerification();
         btn.setOnClickListener(view -> verifynumber());
 
-        call();
     }
 
     private void verifynumber() {
@@ -136,7 +128,7 @@ public class signup2 extends AppCompatActivity {
                 {
                     Log.d("OTP",e.toString());
                     Toast.makeText(signup2.this, "Error sending OTP try again later", Toast.LENGTH_LONG).show();
-//                    finish();
+                    finish();
                 }
                 else{
                     verified[index]=false;
@@ -174,55 +166,57 @@ public class signup2 extends AppCompatActivity {
         // numbers with names stored now save it to database
 
         Log.d(tag,"Call method called");
+        AtomicBoolean all = new AtomicBoolean(true);
 
 
 
-
-        Random rnd = new Random();
         String grpId=phones[0]+"."+java.time.Clock.systemUTC().instant().toString().trim();
+
         HashMap<String , String> data = new HashMap<>();
         for(int i=0;i<5;i++){
-            Character r;  if(i==0||i==1)r='p';  else r='c';
-            userDetails temp = new userDetails(names[i],"+91"+phones[i],r,grpId,null);
-            if(verified[i])
-                data.put("+91"+phones[i],temp.toString());
-        }
+            mDocRef = FirebaseFirestore.getInstance().document("Users/"+"+91"+phones[i]);
 
-        mDocRef = FirebaseFirestore.getInstance().document("Home/Contacts");
-        mDocRef.set(data).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()){
-                Log.d(tag,"Upload Failed", task.getException());
+            if(verified[i]) {
+                data.put("Contact","+91"+phones[i]);
+                data.put("Name", names[i]);
+                data.put("GroupId",grpId);
+                Character r;  if(i==0||i==1)r='p';  else r='c';
+                data.put("Role",r+"");
+                data.put("Location",null);
+                data.put("Stats",null);
+                int finalI = i;
+                mDocRef.set(data).addOnCompleteListener(task -> {
+                    if(!task.isSuccessful()){
+                        Log.d(tag,"Upload Failed for: "+names[finalI], task.getException());
+                        all.set(false);
 //                startActivity(new Intent(this, SplashScreen.class));
-            }else {
-                Log.d(tag,"Upload Successful");
-                createGroup(grpId);
+                    }else {
+                        Log.d(tag,"Upload Successful for: "+names[finalI]);
+                    }
+                });
             }
-        });
-    }
-
-    private void createGroup( String grpId) {
-
-        HashMap<String, String> grp = new HashMap<>();
-        String con = "{[";
+        }
+        data.clear();
         for(int i=0;i<5;i++){
-            if(verified[i]) con+=phones[i]+",";
-        }
-        con = con.substring(0,con.length()-1);
-        con+="]}";
-        grp.put(grpId,con);
-        mDocRef = FirebaseFirestore.getInstance().document("Home/Groups");
-        mDocRef.set(grp).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()){
-                Log.d(tag,"Upload Failed", task.getException());
-//                startActivity(new Intent(this, SplashScreen.class));
-            }else {
-                Log.d(tag,"Upload Successful");
-//                Intent i = new Intent(signup2.this, statsView.class);
-//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(i);
+            mDocRef = FirebaseFirestore.getInstance().document("Groups/"+grpId);
 
+            if(verified[i]) {
+                data.put(i+"","+91"+phones[i]);
+                int finalI = i;
+                mDocRef.set(data).addOnCompleteListener(task -> {
+                    if(!task.isSuccessful()){
+                        Log.d(tag,"Upload Failed for: "+names[finalI], task.getException());
+                        all.set(false);
+                    }else {
+                        Log.d(tag,"Upload Successful for: "+names[finalI]);
+                    }
+                });
             }
-        });
+        }
+        if(all.get()){
+            startActivity(new Intent(signup2.this, loginActivity.class));
+        }
+
     }
 
     private void init(){
@@ -268,26 +262,3 @@ public class signup2 extends AppCompatActivity {
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
