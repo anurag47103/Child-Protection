@@ -11,13 +11,29 @@ public class userDetails {
     private String Role;
     private List<statsItem> Stats;
 
-    public userDetails(String contact, String groupId, android.location.Location location, String name, String role, List<statsItem> stats) {
-        Contact = contact;
-        GroupId = groupId;
-        Location = location;
-        Name = name;
-        Role = role;
-        Stats = stats;
+//    public userDetails(String contact, String groupId, android.location.Location location, String name, String role, List<statsItem> stats) {
+//        Contact = contact;
+//        GroupId = groupId;
+//        Location = location;
+//        Name = name;
+//        Role = role;
+//        Stats = stats;
+//    }
+
+    @Override
+    public String toString() {
+        return "userDetails{" +
+                "Contact='" + Contact + '\'' +
+                ", GroupId='" + GroupId + '\'' +
+                ", Location=" + Location +
+                ", Name='" + Name + '\'' +
+                ", Role='" + Role + '\'' +
+                ", Stats=" + Stats +
+                '}';
+    }
+
+    public userDetails() {
+
     }
 
     public String getContact() {

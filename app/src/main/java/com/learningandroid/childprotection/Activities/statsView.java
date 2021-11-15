@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,6 +54,9 @@ public class statsView extends AppCompatActivity {
     private FloatingActionButton fab;
     private FusedLocationProviderClient fusedLocationClient;
     private DocumentReference mDocRef;
+    private Context context = this;
+    private HashMap grpMap;
+    private final String tag = "StatsView";
 
 
     @Override
@@ -64,7 +68,7 @@ public class statsView extends AppCompatActivity {
         init();
         if (!checkUserStatsPermission()) {
 
-            Dialog dialog = new Dialog(this);
+            Dialog dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.alertdialog);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -81,7 +85,7 @@ public class statsView extends AppCompatActivity {
 
         } else {
 //            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-            layoutManager = new LinearLayoutManager(this);
+            layoutManager = new LinearLayoutManager(context);
             layoutManager.setOrientation(RecyclerView.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
             parentrecyclerViewAdapter = new statsAdapter(userList);
@@ -99,28 +103,59 @@ public class statsView extends AppCompatActivity {
             });
 
         }
-//        getFromDatabase();
+        getFromDatabase();
+
+
 
     }
 
-    private void getFromDatabase() {
+    private void getGroupInfo() {
+        mDocRef = FirebaseFirestore.getInstance().document("Groups/"+commonUtil.MyData.getGroupId());
         mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                HashMap<String, Object> h = (HashMap<String, Object>) documentSnapshot.getData();
-                if (h.containsKey(commonUtil.phone)) {
-                    // user exists
-                    String s = (String) h.get(commonUtil.phone);
-
-
-                } else {
-                    // user dont exists
-
-                }
-                finish();
+            if(documentSnapshot.exists()) {
+                grpMap = (HashMap) documentSnapshot.getData();
+                setGrpInfo();
+            }else {
+                //todo error
             }
+
+        }).addOnFailureListener(e -> Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show());
+
+
+    }
+
+    private void setGrpInfo() {
+        for(int i=0;i<5;i++){
+
+            if(grpMap.containsKey(i+"")){
+                mDocRef = FirebaseFirestore.getInstance().document("Users/"+grpMap.get(i+""));
+                System.out.println("path: "+grpMap.get(i+""));
+                int finalI = i;
+                mDocRef.get().addOnSuccessListener(documentSnapshot -> {
+
+                    String s =documentSnapshot.toObject(userDetails.class).toString();
+                    System.out.println(s);
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(context, "Unable to fetch grp data, Try again later", Toast.LENGTH_SHORT).show();
+
+                });
+
+            }
+        }
+    }
+
+    private void getFromDatabase() {
+        mDocRef = FirebaseFirestore.getInstance().document("Users/"+commonUtil.phone);
+        mDocRef.get().addOnSuccessListener(documentSnapshot -> {
+            commonUtil.MyData  = documentSnapshot.toObject(userDetails.class);
+
+            getGroupInfo();
+
+
         }).addOnFailureListener(e -> {
-            //todo error
+            Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show();
         });
+
     }
 
 
@@ -171,13 +206,15 @@ public class statsView extends AppCompatActivity {
     }
 
 
+
     private void lookforLocationPermission() {
 
-        if (ContextCompat.checkSelfPermission(statsView.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
                 if (location != null) {
                     commonUtil.location = location;
-                    updateLocation();
+                    commonUtil.MyData.setLocation(location);
+                    Log.d(tag,location.toString());
                 }
                 launchmap();
             });
@@ -188,22 +225,14 @@ public class statsView extends AppCompatActivity {
         }
     }
 
-    private void updateLocation() {
-        HashMap<String, String> data = new HashMap<>();
-
-//        userDetails user = new userDetails();
-//        mDocRef.set()
-
-
-    }
-
     private void init() {
         searchView = findViewById(R.id.searchview);
         fab = findViewById(R.id.mapbutton);
         recyclerView = findViewById(R.id.recyclerview);
         usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-//        mDocRef = FirebaseFirestore.getInstance().document("Home/");
+        grpMap = new HashMap<String,Object>();
+
     }
 
     private void launchmap() {
@@ -216,7 +245,7 @@ public class statsView extends AppCompatActivity {
             mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
         } else {
-            Toast.makeText(this, "Wait for app to load map try in a few seconds.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Wait for app to load map try in a few seconds.", Toast.LENGTH_SHORT).show();
         }
 
     }
