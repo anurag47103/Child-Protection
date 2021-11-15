@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/profile"
+            android:title="My profile"
+            android:icon="@drawable/logout_icon"/>
+        <item
+            android:id="@+id/p1"
+            android:title="Parent 1"
+            android:icon="@drawable/logout_icon"/>
+        <item
+            android:id="@+id/p2"
+            android:title="Parent 2"
+            android:icon="@drawable/logout_icon"/>
+        <item
+            android:id="@+id/c1"
+            android:title="Child 1"
+            android:icon="@drawable/logout_icon"/>
+        <item
+            android:id="@+id/c2"
+            android:title="Child 2"
+            android:icon="@drawable/logout_icon"/>
+        <item
+            android:id="@+id/c3"
+            android:title="Child 3"
+            android:icon="@drawable/logout_icon"/>
+        <item
+            android:id="@+id/logout"
+            android:title="Logout"
+            android:icon="@drawable/logout_icon"/>
+    </group>
+
+
+</menu>

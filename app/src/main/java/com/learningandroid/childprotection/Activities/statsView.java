@@ -13,21 +13,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.learningandroid.childprotection.R;
@@ -43,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class statsView extends AppCompatActivity {
+public class statsView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private UsageStatsManager usageStatsManager;
     private RecyclerView recyclerView;
@@ -57,6 +64,9 @@ public class statsView extends AppCompatActivity {
     private Context context = this;
     private HashMap grpMap;
     private final String tag = "StatsView";
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private androidx.appcompat.widget.Toolbar toolbar;
 
 
     @Override
@@ -66,6 +76,17 @@ public class statsView extends AppCompatActivity {
         setContentView(R.layout.activity_recycler_view);
 
         init();
+
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
         if (!checkUserStatsPermission()) {
 
             Dialog dialog = new Dialog(context);
@@ -109,6 +130,64 @@ public class statsView extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        //navigation Item selected
+        switch (item.getItemId()){
+            case R.id.profile:
+                System.out.println("Profile");
+                break;
+            case R.id.p1:
+                System.out.println("p1");
+                break;
+            case R.id.p2:
+                System.out.println("p2");
+                break;
+            case R.id.c1:
+                System.out.println("c1");
+                break;
+            case R.id.c2:
+                System.out.println("c2");
+                break;
+            case R.id.c3:
+                System.out.println("c3");
+                break;
+            case R.id.logout:
+                System.out.println("logout");
+                break;
+
+
+
+
+
+
+        }
+
+        return true;
+    }
+
+    private void init() {
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        searchView = findViewById(R.id.searchview);
+        fab = findViewById(R.id.mapbutton);
+        recyclerView = findViewById(R.id.recyclerview);
+        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        grpMap = new HashMap<String,Object>();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
     private void getGroupInfo() {
         mDocRef = FirebaseFirestore.getInstance().document("Groups/"+commonUtil.MyData.getGroupId());
         mDocRef.get().addOnSuccessListener(documentSnapshot -> {
@@ -130,7 +209,6 @@ public class statsView extends AppCompatActivity {
             if(grpMap.containsKey(i+"")){
                 mDocRef = FirebaseFirestore.getInstance().document("Users/"+grpMap.get(i+""));
                 System.out.println("path: "+grpMap.get(i+""));
-                int finalI = i;
                 mDocRef.get().addOnSuccessListener(documentSnapshot -> {
 
                     String s =documentSnapshot.toObject(userDetails.class).toString();
@@ -157,7 +235,6 @@ public class statsView extends AppCompatActivity {
         });
 
     }
-
 
     private boolean checkUserStatsPermission() {
 
@@ -205,8 +282,6 @@ public class statsView extends AppCompatActivity {
         return false;
     }
 
-
-
     private void lookforLocationPermission() {
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -223,16 +298,6 @@ public class statsView extends AppCompatActivity {
             ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
 
         }
-    }
-
-    private void init() {
-        searchView = findViewById(R.id.searchview);
-        fab = findViewById(R.id.mapbutton);
-        recyclerView = findViewById(R.id.recyclerview);
-        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        grpMap = new HashMap<String,Object>();
-
     }
 
     private void launchmap() {
@@ -265,6 +330,7 @@ public class statsView extends AppCompatActivity {
             }
         });
     }
+
 
 
 }
