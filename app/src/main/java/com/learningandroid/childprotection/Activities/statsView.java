@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -67,6 +69,10 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private androidx.appcompat.widget.Toolbar toolbar;
+    private TextView title;
+    private ProgressBar progressBar;
+    private userDetails dispData;
+
 
 
     @Override
@@ -104,7 +110,8 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
                 finish();
             });
 
-        } else {
+        }
+        else {
 //            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
             layoutManager = new LinearLayoutManager(context);
             layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -124,36 +131,83 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             });
 
         }
-        getFromDatabase();
 
-
-
+        getFromDatabase(commonUtil.phone);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //navigation Item selected
+
         switch (item.getItemId()){
             case R.id.profile:
-                System.out.println("Profile");
+
+                drawerLayout.closeDrawers();
                 break;
+
+
             case R.id.p1:
                 System.out.println("p1");
+                if(grpMap.get("0")!=null)
+                    getFromDatabase(grpMap.get("0").toString());
+                else {
+                    Log.d(tag,"No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
                 break;
+
+
             case R.id.p2:
                 System.out.println("p2");
+                if(grpMap.get("1")!=null)
+                    getFromDatabase(grpMap.get("1").toString());
+                else {
+                    Log.d(tag,"No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
                 break;
+
+
             case R.id.c1:
                 System.out.println("c1");
+                if(grpMap.get("2")!=null)
+                    getFromDatabase(grpMap.get("2").toString());
+                else {
+                    Log.d(tag,"No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
                 break;
+
+
             case R.id.c2:
                 System.out.println("c2");
+                if(grpMap.get("3")!=null)
+                    getFromDatabase(grpMap.get("3").toString());
+                else {
+                    Log.d(tag,"No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
                 break;
+
             case R.id.c3:
                 System.out.println("c3");
+                if(grpMap.get("4")!=null)
+                    getFromDatabase(grpMap.get("4").toString());
+                else {
+                    Log.d(tag,"No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
                 break;
+
+
             case R.id.logout:
                 System.out.println("logout");
+                drawerLayout.closeDrawers();
                 break;
 
 
@@ -177,6 +231,9 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
         usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         grpMap = new HashMap<String,Object>();
+        title = findViewById(R.id.title_name);
+        progressBar = findViewById(R.id.progressbar);
+        dispData = new userDetails();
 
     }
 
@@ -188,44 +245,13 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             super.onBackPressed();
     }
 
-    private void getGroupInfo() {
-        mDocRef = FirebaseFirestore.getInstance().document("Groups/"+commonUtil.MyData.getGroupId());
+    private void getFromDatabase(String phone) {
+        progressBar.setVisibility(View.VISIBLE);
+
+        mDocRef = FirebaseFirestore.getInstance().document("Users/"+phone);
         mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            if(documentSnapshot.exists()) {
-                grpMap = (HashMap) documentSnapshot.getData();
-                setGrpInfo();
-            }else {
-                //todo error
-            }
-
-        }).addOnFailureListener(e -> Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show());
-
-
-    }
-
-    private void setGrpInfo() {
-        for(int i=0;i<5;i++){
-
-            if(grpMap.containsKey(i+"")){
-                mDocRef = FirebaseFirestore.getInstance().document("Users/"+grpMap.get(i+""));
-                System.out.println("path: "+grpMap.get(i+""));
-                mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-
-                    String s =documentSnapshot.toObject(userDetails.class).toString();
-                    System.out.println(s);
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(context, "Unable to fetch grp data, Try again later", Toast.LENGTH_SHORT).show();
-
-                });
-
-            }
-        }
-    }
-
-    private void getFromDatabase() {
-        mDocRef = FirebaseFirestore.getInstance().document("Users/"+commonUtil.phone);
-        mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            commonUtil.MyData  = documentSnapshot.toObject(userDetails.class);
+            dispData  = documentSnapshot.toObject(userDetails.class);
+            title.setText(dispData.getName());
 
             getGroupInfo();
 
@@ -234,7 +260,34 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show();
         });
 
+
+
     }
+
+    private void getGroupInfo() {
+        mDocRef = FirebaseFirestore.getInstance().document("Groups/"+dispData.getGroupId());
+        mDocRef.get().addOnSuccessListener(documentSnapshot -> {
+            if(documentSnapshot.exists()) {
+                grpMap = (HashMap) documentSnapshot.getData();
+                Log.d(tag,"Group Info: "+grpMap.toString());
+
+                
+                progressBar.setVisibility(View.GONE);
+
+
+            }else {
+                //todo error
+                Log.d(tag, "getGroupInfo: null");
+                Toast.makeText(context, "Unable to fetch data", Toast.LENGTH_SHORT).show();
+            }
+
+        }).addOnFailureListener(e -> Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show());
+
+
+    }
+
+
+
 
     private boolean checkUserStatsPermission() {
 

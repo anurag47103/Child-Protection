@@ -32,6 +32,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@+id/imageview"
+            android:maxLines="1"
             android:padding="2dp"
             android:text="@string/sample_name_of_app"
             android:textAlignment="viewStart"
