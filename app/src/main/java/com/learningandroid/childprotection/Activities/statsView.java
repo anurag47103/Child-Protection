@@ -6,6 +6,7 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -147,7 +148,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
 
             case R.id.p1:
-                System.out.println("p1");
+//                System.out.println("p1");
                 if(grpMap.get("0")!=null)
                     getFromDatabase(grpMap.get("0").toString());
                 else {
@@ -159,7 +160,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
 
             case R.id.p2:
-                System.out.println("p2");
+//                System.out.println("p2");
                 if(grpMap.get("1")!=null)
                     getFromDatabase(grpMap.get("1").toString());
                 else {
@@ -171,7 +172,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
 
             case R.id.c1:
-                System.out.println("c1");
+//                System.out.println("c1");
                 if(grpMap.get("2")!=null)
                     getFromDatabase(grpMap.get("2").toString());
                 else {
@@ -183,7 +184,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
 
             case R.id.c2:
-                System.out.println("c2");
+//                System.out.println("c2");
                 if(grpMap.get("3")!=null)
                     getFromDatabase(grpMap.get("3").toString());
                 else {
@@ -194,7 +195,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
                 break;
 
             case R.id.c3:
-                System.out.println("c3");
+//                System.out.println("c3");
                 if(grpMap.get("4")!=null)
                     getFromDatabase(grpMap.get("4").toString());
                 else {
@@ -206,15 +207,13 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
 
             case R.id.logout:
-                System.out.println("logout");
+                SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
+                preferences.edit().putString("phone", "").apply();
+                Intent i = new Intent(context,SplashScreen.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 drawerLayout.closeDrawers();
                 break;
-
-
-
-
-
-
         }
 
         return true;
