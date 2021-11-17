@@ -182,9 +182,8 @@ public class signup2 extends AppCompatActivity {
                 data.put("GroupId",grpId);
                 Character r;  if(i==0||i==1)r='p';  else r='c';
                 data.put("Role",r+"");
-                data.put("Location",null);
-                data.put("Stats",null);
                 int finalI = i;
+
                 mDocRef.set(data).addOnCompleteListener(task -> {
                     if(!task.isSuccessful()){
                         Log.d(tag,"Upload Failed for: "+names[finalI], task.getException());

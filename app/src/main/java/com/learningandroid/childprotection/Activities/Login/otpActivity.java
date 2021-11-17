@@ -27,6 +27,7 @@ import com.learningandroid.childprotection.Activities.SplashScreen;
 import com.learningandroid.childprotection.Activities.newUser.signup1;
 import com.learningandroid.childprotection.Activities.statsView;
 import com.learningandroid.childprotection.R;
+import com.learningandroid.childprotection.commonUtils.commonUtil;
 import com.learningandroid.childprotection.helper.OTP_Receiver;
 
 import java.util.HashMap;
@@ -104,6 +105,7 @@ public class otpActivity extends AppCompatActivity {
         mDocRef.get().addOnSuccessListener(documentSnapshot -> {
             //todo user exists
             Intent i =new Intent(context,statsView.class);
+            commonUtil.phone = phone;//todo error
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }).addOnFailureListener(e -> {

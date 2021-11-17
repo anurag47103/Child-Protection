@@ -6,10 +6,8 @@ import java.util.List;
 public class userDetails {
     private String Contact;
     private String GroupId;
-    private Location Location;
     private String Name;
     private String Role;
-    private List<statsItem> Stats;
 
 //    public userDetails(String contact, String groupId, android.location.Location location, String name, String role, List<statsItem> stats) {
 //        Contact = contact;
@@ -25,10 +23,8 @@ public class userDetails {
         return "userDetails{" +
                 "Contact='" + Contact + '\'' +
                 ", GroupId='" + GroupId + '\'' +
-                ", Location=" + Location +
                 ", Name='" + Name + '\'' +
                 ", Role='" + Role + '\'' +
-                ", Stats=" + Stats +
                 '}';
     }
 
@@ -52,14 +48,6 @@ public class userDetails {
         GroupId = groupId;
     }
 
-    public android.location.Location getLocation() {
-        return Location;
-    }
-
-    public void setLocation(android.location.Location location) {
-        Location = location;
-    }
-
     public String getName() {
         return Name;
     }
@@ -76,11 +64,4 @@ public class userDetails {
         Role = role;
     }
 
-    public List<statsItem> getStats() {
-        return Stats;
-    }
-
-    public void setStats(List<statsItem> stats) {
-        Stats = stats;
-    }
 }

@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
@@ -34,8 +36,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -73,7 +86,8 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
     private TextView title;
     private ProgressBar progressBar;
     private userDetails dispData;
-
+    private com.google.android.gms.location.LocationRequest locationRequest;
+    private LocationCallback locationCallback;
 
 
     @Override
@@ -85,13 +99,11 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
         init();
 
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-
-
 
 
         if (!checkUserStatsPermission()) {
@@ -111,8 +123,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
                 finish();
             });
 
-        }
-        else {
+        } else {
 //            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
             layoutManager = new LinearLayoutManager(context);
             layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -126,155 +137,72 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    lookforLocationPermission();
-
+//                    lookforLocationPermission(true);
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        Toast.makeText(context, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
+                        ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+                        checkLocationSettings();
+                        if(commonUtil.location!=null)launchmap();
+                    }
                 }
             });
 
         }
 
         getFromDatabase(commonUtil.phone);
+
+        UploadUserStats(commonUtil.phone);
+
+//        lookforLocationPermission(false);
+        checkLocationSettings();
+
+
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        //navigation Item selected
 
-        switch (item.getItemId()){
-            case R.id.profile:
-
-                drawerLayout.closeDrawers();
-                break;
-
-
-            case R.id.p1:
-//                System.out.println("p1");
-                if(grpMap.get("0")!=null)
-                    getFromDatabase(grpMap.get("0").toString());
-                else {
-                    Log.d(tag,"No user");
-                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+    private void UploadUserStats(String phone) {
+        if (userList != null) {
+            mDocRef = FirebaseFirestore.getInstance().document("Stats/" + phone);
+            HashMap<String, List<statsItem>> map = new HashMap<>();
+            map.put("Stats", userList);
+            mDocRef.set(map).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(context, "Unable to upload data!", Toast.LENGTH_SHORT).show();
                 }
-                drawerLayout.closeDrawers();
-                break;
+//                    Log.d(tag,"upload task: "+task.isSuccessful());
+            });
 
-
-            case R.id.p2:
-//                System.out.println("p2");
-                if(grpMap.get("1")!=null)
-                    getFromDatabase(grpMap.get("1").toString());
-                else {
-                    Log.d(tag,"No user");
-                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
-                }
-                drawerLayout.closeDrawers();
-                break;
-
-
-            case R.id.c1:
-//                System.out.println("c1");
-                if(grpMap.get("2")!=null)
-                    getFromDatabase(grpMap.get("2").toString());
-                else {
-                    Log.d(tag,"No user");
-                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
-                }
-                drawerLayout.closeDrawers();
-                break;
-
-
-            case R.id.c2:
-//                System.out.println("c2");
-                if(grpMap.get("3")!=null)
-                    getFromDatabase(grpMap.get("3").toString());
-                else {
-                    Log.d(tag,"No user");
-                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
-                }
-                drawerLayout.closeDrawers();
-                break;
-
-            case R.id.c3:
-//                System.out.println("c3");
-                if(grpMap.get("4")!=null)
-                    getFromDatabase(grpMap.get("4").toString());
-                else {
-                    Log.d(tag,"No user");
-                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
-                }
-                drawerLayout.closeDrawers();
-                break;
-
-
-            case R.id.logout:
-                SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
-                preferences.edit().putString("phone", "").apply();
-                Intent i = new Intent(context,SplashScreen.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                drawerLayout.closeDrawers();
-                break;
         }
-
-        return true;
-    }
-
-    private void init() {
-
-        drawerLayout = findViewById(R.id.drawerLayout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        searchView = findViewById(R.id.searchview);
-        fab = findViewById(R.id.mapbutton);
-        recyclerView = findViewById(R.id.recyclerview);
-        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        grpMap = new HashMap<String,Object>();
-        title = findViewById(R.id.title_name);
-        progressBar = findViewById(R.id.progressbar);
-        dispData = new userDetails();
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START))
-            drawerLayout.closeDrawer(GravityCompat.START);
-        else
-            super.onBackPressed();
     }
 
     private void getFromDatabase(String phone) {
         progressBar.setVisibility(View.VISIBLE);
-
-        mDocRef = FirebaseFirestore.getInstance().document("Users/"+phone);
+        mDocRef = FirebaseFirestore.getInstance().document("Users/" + phone);
         mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            dispData  = documentSnapshot.toObject(userDetails.class);
+            dispData = documentSnapshot.toObject(userDetails.class);
             title.setText(dispData.getName());
 
-            getGroupInfo();
-
+            getGroupInfo(dispData.getGroupId());
+            Log.d(tag, "Get from DataBase is working fine as phone: " + phone + " Grp Id: " + dispData.getGroupId());
 
         }).addOnFailureListener(e -> {
             Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show();
         });
-
-
-
     }
 
-    private void getGroupInfo() {
-        mDocRef = FirebaseFirestore.getInstance().document("Groups/"+dispData.getGroupId());
+    private void getGroupInfo(String groupId) {
+        mDocRef = FirebaseFirestore.getInstance().document("Groups/" + groupId);
         mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            if(documentSnapshot.exists()) {
+            if (documentSnapshot.exists()) {
                 grpMap = (HashMap) documentSnapshot.getData();
-                Log.d(tag,"Group Info: "+grpMap.toString());
+                Log.d(tag, "Group Info from grpMap: " + grpMap.toString());
 
-                
+
                 progressBar.setVisibility(View.GONE);
 
 
-            }else {
+            } else {
                 //todo error
                 Log.d(tag, "getGroupInfo: null");
                 Toast.makeText(context, "Unable to fetch data", Toast.LENGTH_SHORT).show();
@@ -285,8 +213,96 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        //navigation Item selected
+
+        switch (item.getItemId()) {
+            case R.id.profile:
+
+                drawerLayout.closeDrawers();
+                break;
 
 
+            case R.id.p1:
+//                System.out.println("p1");
+                if (grpMap.get("0") != null)
+                    getFromDatabase(grpMap.get("0").toString());
+                else {
+                    Log.d(tag, "No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
+                break;
+
+
+            case R.id.p2:
+//                System.out.println("p2");
+                if (grpMap.get("1") != null)
+                    getFromDatabase(grpMap.get("1").toString());
+                else {
+                    Log.d(tag, "No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
+                break;
+
+
+            case R.id.c1:
+//                System.out.println("c1");
+                if (grpMap.get("2") != null)
+                    getFromDatabase(grpMap.get("2").toString());
+                else {
+                    Log.d(tag, "No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
+                break;
+
+
+            case R.id.c2:
+//                System.out.println("c2");
+                if (grpMap.get("3") != null)
+                    getFromDatabase(grpMap.get("3").toString());
+                else {
+                    Log.d(tag, "No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
+                break;
+
+            case R.id.c3:
+//                System.out.println("c3");
+                if (grpMap.get("4") != null)
+                    getFromDatabase(grpMap.get("4").toString());
+                else {
+                    Log.d(tag, "No user");
+                    Toast.makeText(context, "No user", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout.closeDrawers();
+                break;
+
+
+            case R.id.logout:
+                SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
+                preferences.edit().putString("phone", "").apply();
+                Intent i = new Intent(context, SplashScreen.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                drawerLayout.closeDrawers();
+                break;
+        }
+
+        return true;
+    }
 
     private boolean checkUserStatsPermission() {
 
@@ -334,23 +350,31 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
         return false;
     }
 
-    private void lookforLocationPermission() {
-
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-                if (location != null) {
-                    commonUtil.location = location;
-                    commonUtil.MyData.setLocation(location);
-                    Log.d(tag,location.toString());
-                }
-                launchmap();
-            });
-        } else {
-            Toast.makeText(this, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
-            ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-
-        }
-    }
+//    private void lookforLocationPermission(boolean o) {
+//
+//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+//                if (location != null) {
+//                    commonUtil.location = location;
+//
+//                    mDocRef = FirebaseFirestore.getInstance().document("Locations/" + commonUtil.phone);
+//                    HashMap<String, Location> map = new HashMap<>();
+//                    map.put(commonUtil.phone, commonUtil.location);
+//                    mDocRef.set(map).addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            Log.d(tag, "Location update: " + task.isSuccessful());
+//                        }
+//                    });
+//                }
+//
+//                if (o) launchmap();
+//            });
+//        } else {
+//            Toast.makeText(this, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
+//            ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+//
+//        }
+//    }
 
     private void launchmap() {
         //launch map
@@ -382,6 +406,100 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             }
         });
     }
+
+    private void init() {
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        searchView = findViewById(R.id.searchview);
+        fab = findViewById(R.id.mapbutton);
+        recyclerView = findViewById(R.id.recyclerview);
+        usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        grpMap = new HashMap<String, Object>();
+        title = findViewById(R.id.title_name);
+        progressBar = findViewById(R.id.progressbar);
+        dispData = new userDetails();
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(4000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                if(locationResult!=null){
+                    for(Location location:locationResult.getLocations()){
+                        uploadLocation(location);
+                    }
+                }
+            }
+        };
+
+    }
+
+    private void uploadLocation(Location location) {
+        commonUtil.location= location;
+//        Log.d(tag,"Location: "+commonUtil.location);
+
+        mDocRef = FirebaseFirestore.getInstance().document("Locations/" + commonUtil.phone);
+        HashMap<String, Location> map = new HashMap<>();
+        map.put(commonUtil.phone, commonUtil.location);
+        mDocRef.set(map).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+//                Log.d(tag, "Location update: " + task.isSuccessful());
+            }else{
+                Toast.makeText(context, "Unable to upload Location", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkLocationSettings() {
+        LocationSettingsRequest request = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest).build();
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
+        locationSettingsResponseTask.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                updateLocation();
+            }
+        });
+        locationSettingsResponseTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    ResolvableApiException apiException = (ResolvableApiException) e;
+                    try {
+                        apiException.startResolutionForResult(statsView.this, 1001);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
+    private void updateLocation() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+        }
+        else
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
 
 
 
