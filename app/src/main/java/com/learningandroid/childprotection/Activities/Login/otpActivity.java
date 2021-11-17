@@ -106,6 +106,7 @@ public class otpActivity extends AppCompatActivity {
             //todo user exists
             Intent i =new Intent(context,statsView.class);
             commonUtil.phone = phone;//todo error
+//            i.putExtra("phone",phone);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }).addOnFailureListener(e -> {

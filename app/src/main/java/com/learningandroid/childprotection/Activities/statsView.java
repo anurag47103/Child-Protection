@@ -52,6 +52,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.learningandroid.childprotection.R;
 import com.learningandroid.childprotection.adapter.statsAdapter;
@@ -125,26 +126,19 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
         } else {
 //            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-            layoutManager = new LinearLayoutManager(context);
-            layoutManager.setOrientation(RecyclerView.VERTICAL);
-            recyclerView.setLayoutManager(layoutManager);
-            parentrecyclerViewAdapter = new statsAdapter(userList);
-            recyclerView.setAdapter(parentrecyclerViewAdapter);
-            parentrecyclerViewAdapter.notifyDataSetChanged();
+            setAdapter(userList);
 
 
             preparesearchbar();//code for search bar
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            fab.setOnClickListener(view -> {
 //                    lookforLocationPermission(true);
-                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                    {
-                        Toast.makeText(context, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
-                        ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-                        checkLocationSettings();
-                        if(commonUtil.location!=null)launchmap();
-                    }
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                {
+                    checkLocationSettings();
+                    if(commonUtil.location!=null)launchmap(commonUtil.location);
+                }else {
+                    Toast.makeText(context, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
                 }
             });
 
@@ -160,6 +154,40 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
     }
 
+    private void setAdapter(List<statsItem> list){
+//        list =null;
+        if(list==null) {
+            list = new ArrayList<>();
+            list.add(new statsItem(0,"NO Data Available","Null"));
+        }
+            layoutManager = new LinearLayoutManager(context);
+            layoutManager.setOrientation(RecyclerView.VERTICAL);
+            recyclerView.setLayoutManager(layoutManager);
+            parentrecyclerViewAdapter = new statsAdapter(list);
+            recyclerView.setAdapter(parentrecyclerViewAdapter);
+            parentrecyclerViewAdapter.notifyDataSetChanged();
+
+    }
+
+
+
+    private void getFromDatabase(String phone) {
+        progressBar.setVisibility(View.VISIBLE);
+        mDocRef = FirebaseFirestore.getInstance().document("Users/" + phone);
+        mDocRef.get().addOnSuccessListener(documentSnapshot -> {
+            dispData = documentSnapshot.toObject(userDetails.class);
+            title.setText(dispData.getName());
+
+
+
+            getGroupInfo(dispData.getGroupId());
+            Log.d(tag, "Get from DataBase is working fine as phone: " + phone + " Grp Id: " + dispData.getGroupId());
+
+        }).addOnFailureListener(e -> {
+            Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show();
+        });
+
+    }
 
     private void UploadUserStats(String phone) {
         if (userList != null) {
@@ -174,21 +202,6 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             });
 
         }
-    }
-
-    private void getFromDatabase(String phone) {
-        progressBar.setVisibility(View.VISIBLE);
-        mDocRef = FirebaseFirestore.getInstance().document("Users/" + phone);
-        mDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            dispData = documentSnapshot.toObject(userDetails.class);
-            title.setText(dispData.getName());
-
-            getGroupInfo(dispData.getGroupId());
-            Log.d(tag, "Get from DataBase is working fine as phone: " + phone + " Grp Id: " + dispData.getGroupId());
-
-        }).addOnFailureListener(e -> {
-            Toast.makeText(context, "Unable to fetch data, Try again later", Toast.LENGTH_SHORT).show();
-        });
     }
 
     private void getGroupInfo(String groupId) {
@@ -213,13 +226,8 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START))
-            drawerLayout.closeDrawer(GravityCompat.START);
-        else
-            super.onBackPressed();
-    }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -304,83 +312,12 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
         return true;
     }
 
-    private boolean checkUserStatsPermission() {
 
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
-        String s1 = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, cal.getTimeInMillis(), System.currentTimeMillis()) + "";
-//        System.out.println(s1);
-        if (s1.length() > 2) {
-
-//                Log.d("check", "onCreate: " + usageStatsManager.getAppStandbyBucket());
-            List<UsageStats> queryUsageStats = usageStatsManager
-                    .queryUsageStats(
-                            UsageStatsManager.INTERVAL_DAILY,
-                            cal.getTimeInMillis(),
-                            System.currentTimeMillis()
-                    );
-
-//                Log.d("check", cal.getTimeInMillis() + "  onCreate: hogaya" + System.currentTimeMillis());
-            userList = new ArrayList<>();
-            for (UsageStats x : queryUsageStats) {
-                long tt = x.getTotalTimeInForeground();
-
-
-                String s = x.getPackageName();
-                if (commonUtil.applist.containsKey(s)) {
-                    Long time = commonUtil.applist.get(s) + tt;
-                    commonUtil.applist.put(s, time);
-                } else commonUtil.applist.put(s, 0L);
-
-            }
-            for (Map.Entry<String, Long> entry : commonUtil.applist.entrySet()) {
-
-                String name = entry.getKey();
-                Long tt = entry.getValue();
-                long min = TimeUnit.MILLISECONDS.toMinutes(tt) % 60;
-                long hrs = TimeUnit.MILLISECONDS.toHours(tt);
-
-                String time = hrs + ":" + min;
-                if (hrs > 0 || min > 10)
-                    userList.add(new statsItem(R.drawable.ap, name, time + ""));
-            }
-            return true;
-        }
-        return false;
-    }
-
-//    private void lookforLocationPermission(boolean o) {
-//
-//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-//                if (location != null) {
-//                    commonUtil.location = location;
-//
-//                    mDocRef = FirebaseFirestore.getInstance().document("Locations/" + commonUtil.phone);
-//                    HashMap<String, Location> map = new HashMap<>();
-//                    map.put(commonUtil.phone, commonUtil.location);
-//                    mDocRef.set(map).addOnCompleteListener(task -> {
-//                        if (task.isSuccessful()) {
-//                            Log.d(tag, "Location update: " + task.isSuccessful());
-//                        }
-//                    });
-//                }
-//
-//                if (o) launchmap();
-//            });
-//        } else {
-//            Toast.makeText(this, "Please give location permissions to use the button.", Toast.LENGTH_SHORT).show();
-//            ActivityCompat.requestPermissions(statsView.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-//
-//        }
-//    }
-
-    private void launchmap() {
-        //launch map
-        if (commonUtil.location != null) {
-            String latitude = commonUtil.location.getLatitude() + "";
-            String longitude = commonUtil.location.getLongitude() + "";
+    private void launchmap(Location location) {
+        if (location != null) {
+            String latitude = location.getLatitude() + "";
+            String longitude = location.getLongitude() + "";
             Uri uri = Uri.parse("geo:0,0?q=" + latitude + "," + longitude);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
             mapIntent.setPackage("com.google.android.apps.maps");
@@ -391,21 +328,7 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
     }
 
-    private void preparesearchbar() {
-        //code for search bar
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                parentrecyclerViewAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-    }
 
     private void init() {
 
@@ -433,13 +356,71 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
                 if(locationResult!=null){
                     for(Location location:locationResult.getLocations()){
                         uploadLocation(location);
+                        Log.d(tag,"Location: "+location.getLongitude()+" "+location.getLatitude());
+
                     }
                 }
             }
         };
 
     }
+    private boolean checkUserStatsPermission() {
 
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        String s1 = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, cal.getTimeInMillis(), System.currentTimeMillis()) + "";
+        if (s1.length() > 2) {
+
+            List<UsageStats> queryUsageStats = usageStatsManager
+                    .queryUsageStats(
+                            UsageStatsManager.INTERVAL_DAILY,
+                            cal.getTimeInMillis(),
+                            System.currentTimeMillis()
+                    );
+
+            userList = new ArrayList<>();
+            for (UsageStats x : queryUsageStats) {
+                long tt = x.getTotalTimeInForeground();
+
+
+                String s = x.getPackageName();
+                if (commonUtil.applist.containsKey(s)) {
+                    Long time = commonUtil.applist.get(s) + tt;
+                    commonUtil.applist.put(s, time);
+                } else commonUtil.applist.put(s, 0L);
+
+            }
+            for (Map.Entry<String, Long> entry : commonUtil.applist.entrySet()) {
+
+                String name = entry.getKey();
+                Long tt = entry.getValue();
+                long min = TimeUnit.MILLISECONDS.toMinutes(tt) % 60;
+                long hrs = TimeUnit.MILLISECONDS.toHours(tt);
+
+                String time = hrs + ":" + min;
+                if (hrs > 0 || min > 10)
+                    userList.add(new statsItem(R.drawable.ap, name, time + ""));
+            }
+            return true;
+        }
+        return false;
+    }
+    private void preparesearchbar() {
+        //code for search bar
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                parentrecyclerViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
     private void uploadLocation(Location location) {
         commonUtil.location= location;
 //        Log.d(tag,"Location: "+commonUtil.location);
@@ -455,7 +436,6 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
             }
         });
     }
-
     private void checkLocationSettings() {
         LocationSettingsRequest request = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest).build();
@@ -483,13 +463,18 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
 
 
     }
-
     @Override
     protected void onStop() {
         super.onStop();
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
-
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
     private void updateLocation() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -499,8 +484,4 @@ public class statsView extends AppCompatActivity implements NavigationView.OnNav
         else
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
-
-
-
-
 }

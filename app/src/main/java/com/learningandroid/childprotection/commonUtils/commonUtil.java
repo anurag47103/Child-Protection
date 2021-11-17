@@ -10,6 +10,4 @@ public class commonUtil {
     public static Location location;
     public static HashMap<String , Long> applist = new HashMap<>();
     public static String phone ;
-    public static userDetails MyData = new userDetails();
-
 }
